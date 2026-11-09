@@ -38,11 +38,10 @@
             background: radial-gradient(circle at top, #1e293b 0%, var(--royal-bg) 100%);
             min-height: 100vh;
             color: var(--text-light);
-            padding: 14px 12px 50px 12px;
+            padding: 14px 12px 60px 12px;
             background-attachment: fixed;
         }
 
-        /* ئینترۆی ڤیدیۆیی سەرەتایی */
         #splashScreen {
             position: fixed;
             top: 0;
@@ -109,11 +108,11 @@
             margin-top: 3px;
         }
 
-        /* ناڤیگەیشن بار (Tabs) لە شوێنی کارتەکان */
+        /* ناڤیگەیشن باری سێ بەشی (Tabs) */
         .tabs {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px;
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             padding: 6px;
@@ -126,9 +125,9 @@
         .tab-btn {
             border: none;
             background: transparent;
-            padding: 12px;
+            padding: 10px 4px;
             border-radius: 14px;
-            font-size: 0.95rem;
+            font-size: 0.82rem;
             font-weight: 700;
             color: var(--text-muted);
             cursor: pointer;
@@ -182,13 +181,14 @@
         }
 
         .voice-hint {
-            font-size: 0.76rem;
+            font-size: 0.74rem;
             color: var(--gold-light);
             margin-top: 6px;
             background: rgba(212, 175, 55, 0.08);
             padding: 8px 12px;
             border-radius: 10px;
             border: 1px solid rgba(212, 175, 55, 0.15);
+            line-height: 1.4;
         }
 
         .price-chips {
@@ -362,7 +362,6 @@
             text-align: center;
         }
 
-        /* کارتەکانی داهات لە ناو بەشی ڕاپۆرت */
         .stats-grid-report {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -417,7 +416,6 @@
 </head>
 <body>
 
-    <!-- ئینترۆی ڤیدیۆیی سەرەتایی -->
     <div id="splashScreen">
         <video id="introVideo" src="intro.mp4" autoplay muted playsinline></video>
     </div>
@@ -431,19 +429,21 @@
         <p id="currentDateText"></p>
     </div>
 
-    <!-- ناڤیگەیشن باری سەرەکی -->
+    <!-- ناڤیگەیشن باری ٣ بەشی لە خوار لۆگۆوە -->
     <div class="tabs">
         <button class="tab-btn active" id="tabTodayBtn" onclick="switchTab('today')">📋 نۆرەی ئەمڕۆ</button>
+        <button class="tab-btn" id="tabDoneBtn" onclick="switchTab('doneList')">✅ موشتەرییەکانم</button>
         <button class="tab-btn" id="tabHistoryBtn" onclick="switchTab('history')">📊 مێژوو و داهات</button>
     </div>
 
+    <!-- ۱. بەشی نۆرەی ئەمڕۆ و زیادکردنی موشتەری -->
     <div id="todaySection">
         <div class="glass-panel">
             <div class="form-group">
-                <label>ناوی موشتەری (بۆ نووسین بە کوردی، مایکی کیبۆرد دابگرە)</label>
+                <label>ناوی موشتەری (بۆ نووسینی کوردی، مایکی کیبۆرد دابگرە)</label>
                 <input type="text" id="custName" class="input-field" placeholder="ناوی موشتەری بنووسە...">
                 <div class="voice-hint">
-                    🎤 <strong>تێبینی بۆ نووسینی کوردی:</strong> لەسەر ئایفۆن تەنها لەسەر کیبۆردەکە مایکرۆفۆنی بچووکی خوارەوە دابگرە؛ بە کوردییەکی تەواو و بێ کێشە دەنووسێت.
+                    💡 <strong>تێبینی:</strong> بۆ نووسینی کوردی بە دەنگ، تەنها دوگمەی مایکرۆفۆنی بچووکی سەر کیبۆردی ئایفۆنەکەت لە خوارەوە دابگرە؛ بە کوردییەکی پەتی دەنووسێت.
                 </div>
             </div>
 
@@ -467,22 +467,22 @@
             <button class="btn-submit" onclick="addCustomer()">➕ زیادکردن بۆ نۆرە</button>
         </div>
 
-        <!-- لیستی چاوڕوانی -->
         <div class="section-header">
             <span class="section-title">⏳ لیستی چاوڕوانی ئەمڕۆ</span>
         </div>
         <div id="queueContainer" class="queue-list"></div>
+    </div>
 
-        <!-- لیستی موشتەرییەکانی تەواوبوو -->
-        <div class="section-header" style="margin-top: 22px;">
+    <!-- ۲. بەشی موشتەرییەکانی ئەمڕۆم (تەواوبووەکان) -->
+    <div id="doneSection" class="hidden">
+        <div class="section-header">
             <span class="section-title">✅ موشتەرییەکانی ئەمڕۆم (تەواوبووەکان)</span>
         </div>
         <div id="completedContainer" class="queue-list"></div>
     </div>
 
-    <!-- بەشی مێژوو و داهات -->
+    <!-- ۳. بەشی مێژوو و داهات -->
     <div id="historySection" class="hidden">
-        <!-- کارتەکانی ئامار و داهات لێرەدان -->
         <div class="stats-grid-report">
             <div class="stat-card-rep">
                 <div class="stat-title">ئەمڕۆ</div>
@@ -528,19 +528,29 @@
 
     function switchTab(tab) {
         const todaySec = document.getElementById('todaySection');
+        const doneSec = document.getElementById('doneSection');
         const histSec = document.getElementById('historySection');
+        
         const btnToday = document.getElementById('tabTodayBtn');
+        const btnDone = document.getElementById('tabDoneBtn');
         const btnHist = document.getElementById('tabHistoryBtn');
+
+        todaySec.classList.add('hidden');
+        doneSec.classList.add('hidden');
+        histSec.classList.add('hidden');
+        
+        btnToday.classList.remove('active');
+        btnDone.classList.remove('active');
+        btnHist.classList.remove('active');
 
         if (tab === 'today') {
             todaySec.classList.remove('hidden');
-            histSec.classList.add('hidden');
             btnToday.classList.add('active');
-            btnHist.classList.remove('active');
-        } else {
-            todaySec.classList.add('hidden');
+        } else if (tab === 'doneList') {
+            doneSec.classList.remove('hidden');
+            btnDone.classList.add('active');
+        } else if (tab === 'history') {
             histSec.classList.remove('hidden');
-            btnToday.classList.remove('active');
             btnHist.classList.add('active');
             renderHistory();
         }
