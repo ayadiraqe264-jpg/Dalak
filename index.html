@@ -8,18 +8,19 @@
     <meta name="apple-mobile-web-app-title" content="Abdulla Dalak">
     <title>سیستەمی Abdulla Dalak</title>
     
-    <!-- لینک بۆ ئایکۆنی فەرمی ئەپی سەر شاشەی ئایفۆن -->
-    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/ayadiraqe264-jpg/Dalak/main/icon.jpeg">
+    <!-- ئایکۆنی سەر شاشەی ئایفۆن -->
+    <link rel="apple-touch-icon" href="icon.jpeg">
+    <link rel="icon" type="image/jpeg" href="icon.jpeg">
     
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --royal-dark: #0f172a; /* شینی زۆر تۆخ */
-            --royal-bg: #0b0f19; /* باکگراوندی فەخم */
-            --gold-primary: #d4af37; /* ئاڵتوونی سەرەکی */
-            --gold-light: #f3e5ab; /* ئاڵتوونی کاڵ */
-            --glass-bg: rgba(30, 41, 59, 0.75); /* شووشەیی تاریک */
-            --glass-border: rgba(212, 175, 55, 0.25); /* چوارچێوەی ئاڵتوونی */
+            --royal-dark: #0f172a;
+            --royal-bg: #0b0f19;
+            --gold-primary: #d4af37;
+            --gold-light: #f3e5ab;
+            --glass-bg: rgba(30, 41, 59, 0.75);
+            --glass-border: rgba(212, 175, 55, 0.25);
             --text-light: #f8fafc;
             --text-muted: #94a3b8;
             --success: #10b981;
@@ -47,7 +48,6 @@
             margin: 0 auto;
         }
 
-        /* سەرپەڕە */
         .header {
             text-align: center;
             margin-bottom: 14px;
@@ -58,17 +58,16 @@
             border: 1px solid var(--glass-border);
             border-radius: 22px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(212, 175, 55, 0.1);
-            position: relative;
         }
 
         .header .logo-area {
-            width: 70px;
-            height: 70px;
+            width: 76px;
+            height: 76px;
             margin: 0 auto 8px auto;
             border-radius: 18px;
             border: 1.5px solid var(--gold-primary);
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
             background: var(--royal-dark);
         }
 
@@ -92,7 +91,6 @@
             margin-top: 3px;
         }
 
-        /* دوگمەی گۆڕینی بەشەکان (Tabs) */
         .tabs {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -122,7 +120,6 @@
             box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
         }
 
-        /* کارتەکانی ئامار */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -166,7 +163,6 @@
             border-radius: 10px;
         }
 
-        /* فۆڕم */
         .glass-panel {
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
@@ -279,7 +275,6 @@
             margin-top: 4px;
         }
 
-        /* لیستی موشتەرییەکان */
         .section-header {
             display: flex;
             justify-content: space-between;
@@ -396,7 +391,6 @@
             border: 1px dashed var(--glass-border);
         }
 
-        /* بەشی مێژوو و ڕاپۆرت */
         .hidden { display: none; }
 
         .export-box {
@@ -458,14 +452,12 @@
 <div class="container">
     <div class="header">
         <div class="logo-area">
-            <!-- وێنەی لۆگۆکەی عەبدوڵا دەلاک -->
-            <img src="https://raw.githubusercontent.com/ayadiraqe264-jpg/Dalak/main/icon.png" alt="Abdulla Dalak" onerror="this.src='https://cdn-icons-jpeg.flaticon.com/512/10033/10033290.jpeg'">
+            <img src="icon.jpeg" alt="Abdulla Dalak">
         </div>
         <h1>Abdulla Dalak ✂️</h1>
         <p id="currentDateText"></p>
     </div>
 
-    <!-- کارتەکانی ئامار -->
     <div class="stats-grid">
         <div class="stat-card">
             <div class="stat-title">ئەمڕۆ</div>
@@ -484,13 +476,11 @@
         </div>
     </div>
 
-    <!-- گۆڕینی نێوان نۆرەی ئەمڕۆ و ئەرشیف -->
     <div class="tabs">
         <button class="tab-btn active" id="tabTodayBtn" onclick="switchTab('today')">📋 نۆرەی ئەمڕۆ</button>
         <button class="tab-btn" id="tabHistoryBtn" onclick="switchTab('history')">📊 مێژوو و ڕاپۆرت</button>
     </div>
 
-    <!-- بەشی یەکەم: نۆرەی ئەمڕۆ -->
     <div id="todaySection">
         <div class="glass-panel">
             <div class="form-group">
@@ -528,7 +518,6 @@
         <div id="queueContainer" class="queue-list"></div>
     </div>
 
-    <!-- بەشی دووەم: مێژووی ڕۆژانی پێشوو و ڕاپۆرت -->
     <div id="historySection" class="hidden">
         <div class="export-box">
             <button class="btn-outline" onclick="exportCSV()">📥 دابەزاندنی ڕاپۆرت (Excel)</button>
