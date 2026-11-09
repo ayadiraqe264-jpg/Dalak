@@ -109,76 +109,37 @@
             margin-top: 3px;
         }
 
+        /* ناڤیگەیشن بار (Tabs) لە شوێنی کارتەکان */
         .tabs {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
-            background: rgba(15, 23, 42, 0.6);
-            padding: 5px;
-            border-radius: 16px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            padding: 6px;
+            border-radius: 18px;
             margin-bottom: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
 
         .tab-btn {
             border: none;
             background: transparent;
-            padding: 10px;
-            border-radius: 12px;
-            font-size: 0.9rem;
+            padding: 12px;
+            border-radius: 14px;
+            font-size: 0.95rem;
             font-weight: 700;
             color: var(--text-muted);
             cursor: pointer;
             transition: 0.2s;
+            text-align: center;
         }
 
         .tab-btn.active {
             background: linear-gradient(135deg, var(--gold-primary), #b58e22);
             color: var(--royal-dark);
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-
-        .stat-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 18px;
-            padding: 10px 4px;
-            text-align: center;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .stat-title {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .stat-money {
-            font-size: 0.92rem;
-            font-weight: 800;
-            color: var(--gold-primary);
-            direction: ltr;
-        }
-
-        .stat-count {
-            font-size: 0.7rem;
-            color: var(--success);
-            font-weight: 700;
-            margin-top: 4px;
-            background: rgba(16, 185, 129, 0.15);
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
         }
 
         .glass-panel {
@@ -204,11 +165,6 @@
             color: var(--gold-light);
         }
 
-        .input-with-voice {
-            display: flex;
-            gap: 8px;
-        }
-
         .input-field {
             width: 100%;
             padding: 12px 14px;
@@ -225,38 +181,14 @@
             box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
         }
 
-        .btn-voice {
-            width: 48px;
-            border-radius: 14px;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            background: rgba(212, 175, 55, 0.1);
-            color: var(--gold-primary);
-            font-size: 1.25rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            transition: 0.2s;
-        }
-
-        .btn-voice.listening {
-            background: var(--danger);
-            color: white;
-            border-color: var(--danger);
-            animation: pulse 1.2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.5); }
-            70% { box-shadow: 0 0 0 10px rgba(244, 63, 94, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
-        }
-
         .voice-hint {
-            font-size: 0.73rem;
-            color: var(--text-muted);
-            margin-top: 5px;
+            font-size: 0.76rem;
+            color: var(--gold-light);
+            margin-top: 6px;
+            background: rgba(212, 175, 55, 0.08);
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(212, 175, 55, 0.15);
         }
 
         .price-chips {
@@ -430,6 +362,24 @@
             text-align: center;
         }
 
+        /* کارتەکانی داهات لە ناو بەشی ڕاپۆرت */
+        .stats-grid-report {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .stat-card-rep {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 12px 6px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
         .history-day-card {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
@@ -481,38 +431,20 @@
         <p id="currentDateText"></p>
     </div>
 
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-title">ئەمڕۆ</div>
-            <div class="stat-money" id="todayMoney">0</div>
-            <div class="stat-count" id="todayCount">0 کەس</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-title">ئەم هەفتەیە</div>
-            <div class="stat-money" id="weekMoney">0</div>
-            <div class="stat-count" id="weekCount">0 کەس</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-title">ئەم مانگە</div>
-            <div class="stat-money" id="monthMoney">0</div>
-            <div class="stat-count" id="monthCount">0 کەس</div>
-        </div>
-    </div>
-
+    <!-- ناڤیگەیشن باری سەرەکی -->
     <div class="tabs">
         <button class="tab-btn active" id="tabTodayBtn" onclick="switchTab('today')">📋 نۆرەی ئەمڕۆ</button>
-        <button class="tab-btn" id="tabHistoryBtn" onclick="switchTab('history')">📊 مێژوو و ڕاپۆرت</button>
+        <button class="tab-btn" id="tabHistoryBtn" onclick="switchTab('history')">📊 مێژوو و داهات</button>
     </div>
 
     <div id="todaySection">
         <div class="glass-panel">
             <div class="form-group">
-                <label>ناوی موشتەری (بە نووسین یان بە دەنگ)</label>
-                <div class="input-with-voice">
-                    <input type="text" id="custName" class="input-field" placeholder="ناوی موشتەری بنووسە یان مایک دابگرە...">
-                    <button type="button" id="voiceBtn" class="btn-voice" onclick="startVoiceInput()" title="تۆمارکردن بە دەنگ">🎤</button>
+                <label>ناوی موشتەری (بۆ نووسین بە کوردی، مایکی کیبۆرد دابگرە)</label>
+                <input type="text" id="custName" class="input-field" placeholder="ناوی موشتەری بنووسە...">
+                <div class="voice-hint">
+                    🎤 <strong>تێبینی بۆ نووسینی کوردی:</strong> لەسەر ئایفۆن تەنها لەسەر کیبۆردەکە مایکرۆفۆنی بچووکی خوارەوە دابگرە؛ بە کوردییەکی تەواو و بێ کێشە دەنووسێت.
                 </div>
-                <div class="voice-hint" id="voiceStatus">💡 لەسەر ئایفۆن دەتوانیت مایکرۆفۆنی سەر کیبۆردەکەش بەکاربهێنیت.</div>
             </div>
 
             <div class="form-group">
@@ -548,7 +480,27 @@
         <div id="completedContainer" class="queue-list"></div>
     </div>
 
+    <!-- بەشی مێژوو و داهات -->
     <div id="historySection" class="hidden">
+        <!-- کارتەکانی ئامار و داهات لێرەدان -->
+        <div class="stats-grid-report">
+            <div class="stat-card-rep">
+                <div class="stat-title">ئەمڕۆ</div>
+                <div class="stat-money" id="todayMoney">0</div>
+                <div class="stat-count" id="todayCount">0 کەس</div>
+            </div>
+            <div class="stat-card-rep">
+                <div class="stat-title">ئەم هەفتەیە</div>
+                <div class="stat-money" id="weekMoney">0</div>
+                <div class="stat-count" id="weekCount">0 کەس</div>
+            </div>
+            <div class="stat-card-rep">
+                <div class="stat-title">ئەم مانگە</div>
+                <div class="stat-money" id="monthMoney">0</div>
+                <div class="stat-count" id="monthCount">0 کەس</div>
+            </div>
+        </div>
+
         <div class="export-box">
             <button class="btn-outline" onclick="exportCSV()">📥 دابەزاندنی ڕاپۆرت (Excel)</button>
             <button class="btn-outline" onclick="shareSummary()">📤 ناردنی کورتەی داهات</button>
@@ -558,7 +510,6 @@
 </div>
 
 <script>
-    // بەڕێوەبردنی ئینترۆی ڤیدیۆیی
     const introVid = document.getElementById('introVideo');
     const removeSplash = () => {
         const splash = document.getElementById('splashScreen');
@@ -568,7 +519,7 @@
         }
     };
     introVid.onended = removeSplash;
-    setTimeout(removeSplash, 5000); // دڵنیایی لە کارکردنی ئەگەر ڤیدیۆکە کێشەی هەبوو
+    setTimeout(removeSplash, 5000);
 
     let records = JSON.parse(localStorage.getItem('barber_records_v1')) || [];
 
@@ -597,45 +548,6 @@
 
     function setPrice(val) {
         document.getElementById('custPrice').value = val;
-    }
-
-    function startVoiceInput() {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        const statusEl = document.getElementById('voiceStatus');
-        const voiceBtn = document.getElementById('voiceBtn');
-        const nameInput = document.getElementById('custName');
-
-        if (!SpeechRecognition) {
-            nameInput.focus();
-            alert('تکایە مایکرۆفۆنی کیبۆردی مۆبایلەکەت بەکاربهێنە.');
-            return;
-        }
-
-        const recognition = new SpeechRecognition();
-        recognition.lang = 'ckb-IQ';
-        recognition.interimResults = false;
-        recognition.maxAlternatives = 1;
-
-        recognition.onstart = () => {
-            voiceBtn.classList.add('listening');
-            statusEl.innerText = '🎙️ ئێستا قسە بکە...';
-        };
-
-        recognition.onresult = (event) => {
-            nameInput.value = event.results[0][0].transcript;
-            statusEl.innerText = '✅ ناوەکە وەرگیرا.';
-        };
-
-        recognition.onerror = () => {
-            statusEl.innerText = '⚠️ مایکرۆفۆنی کیبۆرده‌کە بەکاربهێنە.';
-            voiceBtn.classList.remove('listening');
-        };
-
-        recognition.onend = () => {
-            voiceBtn.classList.remove('listening');
-        };
-
-        recognition.start();
     }
 
     function addCustomer() {
@@ -714,7 +626,6 @@
         const pendingList = todayList.filter(item => !item.completed);
         const doneList = todayList.filter(item => item.completed);
 
-        // ۱. لیستی چاوڕوانی
         if (pendingList.length === 0) {
             queueContainer.innerHTML = `<div class="empty-state">هیچ موشتەرییەک لە لیستی چاوڕوانیدا نییە</div>`;
         } else {
@@ -751,7 +662,6 @@
             });
         }
 
-        // ۲. موشتەرییەکانی ئەمڕۆم (تەواوبووەکان)
         if (doneList.length === 0) {
             completedContainer.innerHTML = `<div class="empty-state">هێشتا هیچ موشتەرییەک تەواو نەکراوە</div>`;
         } else {
