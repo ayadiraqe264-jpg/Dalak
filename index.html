@@ -8,7 +8,6 @@
     <meta name="apple-mobile-web-app-title" content="Abdulla Dalak">
     <title>سیستەمی Abdulla Dalak</title>
     
-    <!-- ئایکۆنی سەر شاشەی ئایفۆن -->
     <link rel="apple-touch-icon" href="icon.jpeg">
     <link rel="icon" type="image/jpeg" href="icon.jpeg">
     
@@ -43,6 +42,27 @@
             background-attachment: fixed;
         }
 
+        /* ئینترۆی ڤیدیۆیی سەرەتایی */
+        #splashScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--royal-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        #introVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         .container {
             max-width: 500px;
             margin: 0 auto;
@@ -57,7 +77,7 @@
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 22px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(212, 175, 55, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
         .header .logo-area {
@@ -81,8 +101,6 @@
             font-size: 1.4rem;
             color: var(--gold-primary);
             font-weight: 800;
-            letter-spacing: 0.5px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
         }
 
         .header p {
@@ -279,7 +297,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin: 14px 0 10px 0;
             padding: 0 4px;
         }
 
@@ -309,9 +327,8 @@
         }
 
         .customer-card.done {
-            opacity: 0.55;
-            background: rgba(15, 23, 42, 0.5);
-            border-color: rgba(16, 185, 129, 0.2);
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
         }
 
         .customer-info {
@@ -378,14 +395,15 @@
         }
 
         .btn-call { background: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.2); }
+        .btn-whatsapp { background: rgba(37, 211, 102, 0.15); color: #25D366; border: 1px solid rgba(37, 211, 102, 0.2); }
         .btn-done { background: rgba(212, 175, 55, 0.15); color: var(--gold-primary); border: 1px solid rgba(212, 175, 55, 0.2); }
         .btn-delete { background: rgba(244, 63, 94, 0.12); color: var(--danger); border: 1px solid rgba(244, 63, 94, 0.15); }
 
         .empty-state {
             text-align: center;
-            padding: 26px 14px;
+            padding: 20px 14px;
             color: var(--text-muted);
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             background: var(--glass-bg);
             border-radius: 18px;
             border: 1px dashed var(--glass-border);
@@ -448,6 +466,11 @@
     </style>
 </head>
 <body>
+
+    <!-- ئینترۆی ڤیدیۆیی سەرەتایی -->
+    <div id="splashScreen">
+        <video id="introVideo" src="intro.mp4" autoplay muted playsinline></video>
+    </div>
 
 <div class="container">
     <div class="header">
@@ -512,10 +535,17 @@
             <button class="btn-submit" onclick="addCustomer()">➕ زیادکردن بۆ نۆرە</button>
         </div>
 
+        <!-- لیستی چاوڕوانی -->
         <div class="section-header">
-            <span class="section-title">لیستی نۆرەی ئەمڕۆ</span>
+            <span class="section-title">⏳ لیستی چاوڕوانی ئەمڕۆ</span>
         </div>
         <div id="queueContainer" class="queue-list"></div>
+
+        <!-- لیستی موشتەرییەکانی تەواوبوو -->
+        <div class="section-header" style="margin-top: 22px;">
+            <span class="section-title">✅ موشتەرییەکانی ئەمڕۆم (تەواوبووەکان)</span>
+        </div>
+        <div id="completedContainer" class="queue-list"></div>
     </div>
 
     <div id="historySection" class="hidden">
@@ -528,6 +558,18 @@
 </div>
 
 <script>
+    // بەڕێوەبردنی ئینترۆی ڤیدیۆیی
+    const introVid = document.getElementById('introVideo');
+    const removeSplash = () => {
+        const splash = document.getElementById('splashScreen');
+        if(splash) {
+            splash.style.opacity = '0';
+            setTimeout(() => splash.remove(), 500);
+        }
+    };
+    introVid.onended = removeSplash;
+    setTimeout(removeSplash, 5000); // دڵنیایی لە کارکردنی ئەگەر ڤیدیۆکە کێشەی هەبوو
+
     let records = JSON.parse(localStorage.getItem('barber_records_v1')) || [];
 
     const todayStr = new Date().toLocaleDateString('ckb-IQ', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
@@ -535,18 +577,18 @@
 
     function switchTab(tab) {
         const todaySec = document.getElementById('todaySection');
-        const htmlSec = document.getElementById('historySection');
+        const histSec = document.getElementById('historySection');
         const btnToday = document.getElementById('tabTodayBtn');
         const btnHist = document.getElementById('tabHistoryBtn');
 
         if (tab === 'today') {
             todaySec.classList.remove('hidden');
-            htmlSec.classList.add('hidden');
+            histSec.classList.add('hidden');
             btnToday.classList.add('active');
             btnHist.classList.remove('active');
         } else {
             todaySec.classList.add('hidden');
-            htmlSec.classList.remove('hidden');
+            histSec.classList.remove('hidden');
             btnToday.classList.remove('active');
             btnHist.classList.add('active');
             renderHistory();
@@ -565,7 +607,7 @@
 
         if (!SpeechRecognition) {
             nameInput.focus();
-            alert('تکایە دوگمەی مایکرۆفۆنی خوارەوەی کیبۆردی ئایفۆنەکەت دابگرە بۆ نووسینی دەنگ.');
+            alert('تکایە مایکرۆفۆنی کیبۆردی مۆبایلەکەت بەکاربهێنە.');
             return;
         }
 
@@ -580,13 +622,12 @@
         };
 
         recognition.onresult = (event) => {
-            const transcript = event.results[0][0].transcript;
-            nameInput.value = transcript;
+            nameInput.value = event.results[0][0].transcript;
             statusEl.innerText = '✅ ناوەکە وەرگیرا.';
         };
 
         recognition.onerror = () => {
-            statusEl.innerText = '⚠️ ئەگەر کارینەکرد، مایکرۆفۆنی سەر کیبۆرده‌کە بەکاربهێنە.';
+            statusEl.innerText = '⚠️ مایکرۆفۆنی کیبۆرده‌کە بەکاربهێنە.';
             voiceBtn.classList.remove('listening');
         };
 
@@ -665,47 +706,87 @@
     }
 
     function renderQueue() {
-        const container = document.getElementById('queueContainer');
+        const queueContainer = document.getElementById('queueContainer');
+        const completedContainer = document.getElementById('completedContainer');
         const now = new Date();
+        
         const todayList = records.filter(item => isSameDay(new Date(item.timestamp), now));
+        const pendingList = todayList.filter(item => !item.completed);
+        const doneList = todayList.filter(item => item.completed);
 
-        if (todayList.length === 0) {
-            container.innerHTML = `<div class="empty-state">هیچ موشتەرییەک لە لیستی ئەمڕۆدا نییە</div>`;
-            return;
-        }
+        // ۱. لیستی چاوڕوانی
+        if (pendingList.length === 0) {
+            queueContainer.innerHTML = `<div class="empty-state">هیچ موشتەرییەک لە لیستی چاوڕوانیدا نییە</div>`;
+        } else {
+            queueContainer.innerHTML = '';
+            pendingList.forEach((item, index) => {
+                const timeFormatted = new Date(item.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                const card = document.createElement('div');
+                card.className = 'customer-card';
 
-        container.innerHTML = '';
-        todayList.forEach((item, index) => {
-            const timeFormatted = new Date(item.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-            const card = document.createElement('div');
-            card.className = `customer-card ${item.completed ? 'done' : ''}`;
+                const callHTML = item.phone ? `<a href="tel:${item.phone}" class="btn-icon btn-call" title="تەلەفۆن">📞</a>` : '';
+                const waPhone = item.phone ? item.phone.replace(/^0/, '+964') : '';
+                const waHTML = item.phone ? `<a href="https://wa.me/${waPhone}" target="_blank" class="btn-icon btn-whatsapp" title="واتسئاپ">💬</a>` : '';
 
-            const callButtonHTML = item.phone
-                ? `<a href="tel:${item.phone}" class="btn-icon btn-call">📞</a>`
-                : '';
-
-            card.innerHTML = `
-                <div class="customer-info">
-                    <div class="queue-number">${index + 1}</div>
-                    <div class="customer-details">
-                        <h3>${item.name}</h3>
-                        <div class="customer-meta">
-                            <span class="price-badge">${item.price.toLocaleString()} د.ع</span>
-                            <span>•</span>
-                            <span dir="ltr">${timeFormatted}</span>
+                card.innerHTML = `
+                    <div class="customer-info">
+                        <div class="queue-number">${index + 1}</div>
+                        <div class="customer-details">
+                            <h3>${item.name}</h3>
+                            <div class="customer-meta">
+                                <span class="price-badge">${item.price.toLocaleString()} د.ع</span>
+                                <span>•</span>
+                                <span dir="ltr">${timeFormatted}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="action-buttons">
-                    ${callButtonHTML}
-                    <button class="btn-icon btn-done" onclick="toggleComplete(${item.id})">
-                        ${item.completed ? '✅' : '✔️'}
-                    </button>
-                    <button class="btn-icon btn-delete" onclick="deleteRecord(${item.id})">🗑️</button>
-                </div>
-            `;
-            container.appendChild(card);
-        });
+                    <div class="action-buttons">
+                        ${callHTML}
+                        ${waHTML}
+                        <button class="btn-icon btn-done" onclick="toggleComplete(${item.id})" title="تەواوبوو">✔️</button>
+                        <button class="btn-icon btn-delete" onclick="deleteRecord(${item.id})" title="سڕینەوە">🗑️</button>
+                    </div>
+                `;
+                queueContainer.appendChild(card);
+            });
+        }
+
+        // ۲. موشتەرییەکانی ئەمڕۆم (تەواوبووەکان)
+        if (doneList.length === 0) {
+            completedContainer.innerHTML = `<div class="empty-state">هێشتا هیچ موشتەرییەک تەواو نەکراوە</div>`;
+        } else {
+            completedContainer.innerHTML = '';
+            doneList.forEach((item, index) => {
+                const timeFormatted = new Date(item.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                const card = document.createElement('div');
+                card.className = 'customer-card done';
+
+                const callHTML = item.phone ? `<a href="tel:${item.phone}" class="btn-icon btn-call" title="تەلەفۆن">📞</a>` : '';
+                const waPhone = item.phone ? item.phone.replace(/^0/, '+964') : '';
+                const waHTML = item.phone ? `<a href="https://wa.me/${waPhone}" target="_blank" class="btn-icon btn-whatsapp" title="واتسئاپ">💬</a>` : '';
+
+                card.innerHTML = `
+                    <div class="customer-info">
+                        <div class="queue-number">✓</div>
+                        <div class="customer-details">
+                            <h3>${item.name}</h3>
+                            <div class="customer-meta">
+                                <span class="price-badge">${item.price.toLocaleString()} د.ع</span>
+                                <span>•</span>
+                                <span dir="ltr">${timeFormatted}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        ${callHTML}
+                        ${waHTML}
+                        <button class="btn-icon btn-done" onclick="toggleComplete(${item.id})" title="گەڕاندنەوە" style="background: rgba(16,185,129,0.3);">✅</button>
+                        <button class="btn-icon btn-delete" onclick="deleteRecord(${item.id})" title="سڕینەوە">🗑️</button>
+                    </div>
+                `;
+                completedContainer.appendChild(card);
+            });
+        }
     }
 
     function calculateStats() {
