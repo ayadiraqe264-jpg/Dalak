@@ -18,16 +18,15 @@
 
     <style>
         :root {
-            --royal-dark: #0f172a;
-            --royal-bg: #0b0f19;
-            --gold-primary: #d4af37;
-            --gold-light: #f3e5ab;
-            --glass-bg: rgba(30, 41, 59, 0.75);
-            --glass-border: rgba(212, 175, 55, 0.25);
-            --text-light: #f8fafc;
-            --text-muted: #94a3b8;
+            --bg-main: #f8fafc;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(226, 232, 240, 0.8);
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --sky-primary: #0284c7;
+            --sky-light: #e0f2fe;
             --success: #10b981;
-            --danger: #f43f5e;
+            --danger: #ef4444;
         }
 
         * {
@@ -39,17 +38,17 @@
         }
 
         body {
-            background: radial-gradient(circle at top, #1e293b 0%, var(--royal-bg) 100%);
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
             min-height: 100vh;
-            color: var(--text-light);
-            padding: 14px 12px 60px 12px;
+            color: var(--text-dark);
+            padding: 14px 12px 80px 12px;
             background-attachment: fixed;
         }
 
         #splashScreen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--royal-bg);
+            background: #ffffff;
             display: flex; justify-content: center; align-items: center;
             z-index: 9999;
             transition: opacity 0.5s ease;
@@ -67,7 +66,7 @@
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 22px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(2, 132, 199, 0.08);
             position: relative;
         }
 
@@ -89,17 +88,17 @@
 
         .header .logo-area {
             width: 76px; height: 76px; margin: 0 auto 8px auto;
-            border-radius: 18px; border: 1.5px solid var(--gold-primary);
-            overflow: hidden; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
-            background: var(--royal-dark);
+            border-radius: 18px; border: 1.5px solid var(--sky-primary);
+            overflow: hidden; box-shadow: 0 4px 15px rgba(2, 132, 199, 0.15);
+            background: white;
         }
 
         .header .logo-area img { width: 100%; height: 100%; object-fit: cover; }
-        .header h1 { font-size: 1.4rem; color: var(--gold-primary); font-weight: 800; }
+        .header h1 { font-size: 1.4rem; color: var(--sky-primary); font-weight: 800; }
         .header p { font-size: 0.8rem; color: var(--text-muted); margin-top: 3px; }
 
         .barber-status-bar {
-            background: rgba(15, 23, 42, 0.85);
+            background: white;
             border: 1px solid var(--glass-border);
             padding: 10px 14px;
             border-radius: 16px;
@@ -126,86 +125,90 @@
             cursor: pointer;
         }
 
-        .status-btn.online { background: rgba(16, 185, 129, 0.2); color: var(--success); border: 1px solid var(--success); }
-        .status-btn.offline { background: rgba(244, 63, 94, 0.2); color: var(--danger); border: 1px solid var(--danger); }
+        .status-btn.online { background: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid var(--success); }
+        .status-btn.offline { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid var(--danger); }
 
+        /* Navigation خوارەوە */
         .tabs {
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;
-            background: var(--glass-bg); backdrop-filter: blur(20px);
-            padding: 6px; border-radius: 18px; margin-bottom: 16px;
-            border: 1px solid var(--glass-border); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px);
+            padding: 8px 12px; border-top: 1px solid var(--glass-border);
+            z-index: 8000; box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+            max-width: 500px; margin: 0 auto;
         }
 
         .tab-btn {
-            border: none; background: transparent; padding: 10px 2px;
-            border-radius: 13px; font-size: 0.76rem; font-weight: 700;
+            border: none; background: transparent; padding: 8px 2px;
+            border-radius: 12px; font-size: 0.75rem; font-weight: 700;
             color: var(--text-muted); cursor: pointer; transition: 0.2s; text-align: center;
         }
 
         .tab-btn.active {
-            background: linear-gradient(135deg, var(--gold-primary), #b58e22);
-            color: var(--royal-dark); box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
+            background: var(--sky-primary);
+            color: white; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
         }
 
         .glass-panel {
             background: var(--glass-bg); backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border); border-radius: 22px;
-            padding: 16px; margin-bottom: 18px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            padding: 16px; margin-bottom: 18px; box-shadow: 0 8px 25px rgba(2, 132, 199, 0.06);
         }
 
         .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 0.84rem; font-weight: 700; margin-bottom: 6px; color: var(--gold-light); }
+        .form-group label { display: block; font-size: 0.84rem; font-weight: 700; margin-bottom: 6px; color: var(--text-dark); }
 
         .input-field {
             width: 100%; padding: 12px 14px; border-radius: 14px;
-            border: 1px solid rgba(212, 175, 55, 0.2); background: rgba(15, 23, 42, 0.8);
-            font-size: 0.95rem; color: var(--text-light); outline: none;
+            border: 1px solid #cbd5e1; background: #ffffff;
+            font-size: 0.95rem; color: var(--text-dark); outline: none;
         }
-        .input-field:focus { border-color: var(--gold-primary); box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15); }
+        .input-field:focus { border-color: var(--sky-primary); box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15); }
 
         .price-chips { display: flex; gap: 7px; margin-top: 8px; overflow-x: auto; padding-bottom: 4px; }
         .chip {
-            background: rgba(212, 175, 55, 0.08); color: var(--gold-primary);
-            border: 1px solid rgba(212, 175, 55, 0.25); padding: 6px 12px;
+            background: var(--sky-light); color: var(--sky-primary);
+            border: 1px solid rgba(2, 132, 199, 0.2); padding: 6px 12px;
             border-radius: 12px; font-size: 0.8rem; font-weight: 700; cursor: pointer; white-space: nowrap;
         }
 
         .btn-submit {
-            width: 100%; background: linear-gradient(135deg, var(--gold-primary), #b58e22);
-            color: var(--royal-dark); border: none; padding: 13px; border-radius: 15px;
-            font-size: 1rem; font-weight: 800; cursor: pointer; box-shadow: 0 6px 18px rgba(212, 175, 55, 0.2); margin-top: 4px;
+            width: 100%; background: var(--sky-primary);
+            color: white; border: none; padding: 13px; border-radius: 15px;
+            font-size: 1rem; font-weight: 800; cursor: pointer; box-shadow: 0 6px 18px rgba(2, 132, 199, 0.2); margin-top: 4px;
         }
 
         .section-header { display: flex; justify-content: space-between; align-items: center; margin: 14px 0 10px 0; padding: 0 4px; }
-        .section-title { font-size: 1rem; font-weight: 800; color: var(--gold-light); }
+        .section-title { font-size: 1rem; font-weight: 800; color: var(--text-dark); }
 
         .queue-list { display: flex; flex-direction: column; gap: 10px; }
 
         .customer-card {
-            background: var(--glass-bg); backdrop-filter: blur(20px);
+            background: white; backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border); border-radius: 18px;
             padding: 12px 14px; display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
         }
-        .customer-card.done { background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3); }
+        .customer-card.done { background: rgba(16, 185, 129, 0.05); border-color: rgba(16, 185, 129, 0.2); }
 
         .customer-info { display: flex; align-items: center; gap: 10px; }
         .queue-number {
-            background: linear-gradient(135deg, var(--gold-primary), #b58e22);
-            color: var(--royal-dark); width: 32px; height: 32px; border-radius: 10px;
+            background: var(--sky-primary);
+            color: white; width: 32px; height: 32px; border-radius: 10px;
             display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; flex-shrink: 0;
         }
         .customer-card.done .queue-number { background: var(--success); color: white; }
 
-        .customer-details h3 { font-size: 0.96rem; font-weight: 700; color: var(--text-light); display: flex; align-items: center; gap: 6px; }
-        .online-badge { font-size: 0.68rem; background: rgba(16, 185, 129, 0.18); color: var(--success); padding: 2px 7px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .customer-details h3 { font-size: 0.96rem; font-weight: 700; color: var(--text-dark); display: flex; align-items: center; gap: 6px; }
+        .online-badge { font-size: 0.68rem; background: rgba(16, 185, 129, 0.15); color: var(--success); padding: 2px 7px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.3); }
 
         .customer-meta { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
         .price-badge {
-            color: var(--gold-primary); font-weight: 700; background: rgba(212, 175, 55, 0.12);
-            padding: 2px 8px; border-radius: 8px; border: 1px solid rgba(212, 175, 55, 0.3); cursor: pointer;
+            color: var(--sky-primary); font-weight: 700; background: var(--sky-light);
+            padding: 2px 8px; border-radius: 8px; border: 1px solid rgba(2, 132, 199, 0.2); cursor: pointer;
         }
-        .price-badge.unset { color: #fbbf24; background: rgba(245, 158, 11, 0.18); border: 1px dashed #fbbf24; }
+        .price-badge.unset { color: #d97706; background: #fef3c7; border: 1px dashed #f59e0b; }
         .time-badge { color: var(--success); background: rgba(16, 185, 129, 0.12); padding: 2px 8px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.3); font-weight: 700; }
 
         .action-buttons { display: flex; gap: 5px; }
@@ -213,72 +216,72 @@
             border: none; width: 34px; height: 34px; border-radius: 10px;
             display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.95rem; text-decoration: none;
         }
-        .btn-call { background: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.2); }
-        .btn-whatsapp { background: rgba(37, 211, 102, 0.15); color: #25D366; border: 1px solid rgba(37, 211, 102, 0.2); }
-        .btn-done { background: rgba(212, 175, 55, 0.15); color: var(--gold-primary); border: 1px solid rgba(212, 175, 55, 0.2); }
-        .btn-delete { background: rgba(244, 63, 94, 0.12); color: var(--danger); border: 1px solid rgba(244, 63, 94, 0.15); }
+        .btn-call { background: rgba(16, 185, 129, 0.12); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.2); }
+        .btn-whatsapp { background: rgba(37, 211, 102, 0.12); color: #25D366; border: 1px solid rgba(37, 211, 102, 0.2); }
+        .btn-done { background: var(--sky-light); color: var(--sky-primary); border: 1px solid rgba(2, 132, 199, 0.2); }
+        .btn-delete { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.15); }
 
         .empty-state {
             text-align: center; padding: 20px 14px; color: var(--text-muted);
-            font-size: 0.85rem; background: var(--glass-bg); border-radius: 18px; border: 1px dashed var(--glass-border);
+            font-size: 0.85rem; background: white; border-radius: 18px; border: 1px dashed var(--glass-border);
         }
 
         .hidden { display: none !important; }
 
         .export-box { display: flex; gap: 8px; margin-bottom: 14px; }
         .btn-outline {
-            flex: 1; padding: 11px; border-radius: 14px; border: 1px solid var(--gold-primary);
-            background: rgba(212, 175, 55, 0.05); color: var(--gold-primary); font-weight: 700; font-size: 0.85rem; cursor: pointer; text-align: center;
+            flex: 1; padding: 11px; border-radius: 14px; border: 1px solid var(--sky-primary);
+            background: white; color: var(--sky-primary); font-weight: 700; font-size: 0.85rem; cursor: pointer; text-align: center;
         }
 
         .stats-grid-report { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
         .stat-card-rep {
-            background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
-            border-radius: 18px; padding: 12px 6px; text-align: center; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            background: white; border: 1px solid var(--glass-border);
+            border-radius: 18px; padding: 12px 6px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
         }
         .stat-title { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; margin-bottom: 4px; }
-        .stat-money { font-size: 0.92rem; font-weight: 800; color: var(--gold-primary); direction: ltr; }
-        .stat-count { font-size: 0.7rem; color: var(--success); font-weight: 700; margin-top: 4px; background: rgba(16, 185, 129, 0.15); display: inline-block; padding: 2px 8px; border-radius: 10px; }
+        .stat-money { font-size: 0.92rem; font-weight: 800; color: var(--sky-primary); direction: ltr; }
+        .stat-count { font-size: 0.7rem; color: var(--success); font-weight: 700; margin-top: 4px; background: rgba(16, 185, 129, 0.12); display: inline-block; padding: 2px 8px; border-radius: 10px; }
 
         .history-day-card {
-            background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px;
+            background: white; border: 1px solid var(--glass-border); border-radius: 16px;
             padding: 12px 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
         }
-        .history-date { font-weight: 800; font-size: 0.92rem; color: var(--text-light); }
+        .history-date { font-weight: 800; font-size: 0.92rem; color: var(--text-dark); }
         .history-stats { text-align: left; }
-        .history-money { font-weight: 800; color: var(--gold-primary); font-size: 0.95rem; direction: ltr; }
+        .history-money { font-weight: 800; color: var(--sky-primary); font-size: 0.95rem; direction: ltr; }
         .history-count { font-size: 0.75rem; color: var(--success); font-weight: 700; }
 
         .qr-box { text-align: center; padding: 22px 16px; }
         .qr-image-wrap {
             background: white; padding: 14px; border-radius: 20px; display: inline-block; margin: 14px 0;
-            border: 3px solid var(--gold-primary); box-shadow: 0 8px 25px rgba(212, 175, 55, 0.25);
+            border: 3px solid var(--sky-primary); box-shadow: 0 8px 25px rgba(2, 132, 199, 0.15);
         }
         .qr-image-wrap img { width: 210px; height: 210px; display: block; }
 
         .ticket-box {
-            text-align: center; padding: 24px 16px; border: 2px dashed var(--gold-primary);
-            border-radius: 20px; background: rgba(212, 175, 55, 0.06); margin-top: 14px;
+            text-align: center; padding: 24px 16px; border: 2px dashed var(--sky-primary);
+            border-radius: 20px; background: var(--sky-light); margin-top: 14px;
         }
-        .ticket-num { font-size: 2.8rem; font-weight: 800; color: var(--gold-primary); line-height: 1; margin: 10px 0; }
+        .ticket-num { font-size: 2.8rem; font-weight: 800; color: var(--sky-primary); line-height: 1; margin: 10px 0; }
         .queue-banner {
-            background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--success);
+            background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--success);
             padding: 12px; border-radius: 16px; text-align: center; font-weight: 800; font-size: 1rem; margin-bottom: 14px;
         }
 
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(6px);
+            background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px);
             display: flex; justify-content: center; align-items: center; z-index: 9000; padding: 16px;
         }
         .modal-box {
-            background: var(--royal-dark); border: 1.5px solid var(--gold-primary);
-            border-radius: 22px; padding: 20px; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            background: white; border: 1px solid var(--glass-border);
+            border-radius: 22px; padding: 20px; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.1);
         }
         .modal-price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 14px 0; }
         .modal-price-btn {
-            background: rgba(212, 175, 55, 0.12); border: 1px solid var(--gold-primary);
-            color: var(--gold-primary); padding: 12px; border-radius: 12px; font-weight: 800; font-size: 0.95rem; cursor: pointer;
+            background: var(--sky-light); border: 1px solid var(--sky-primary);
+            color: var(--sky-primary); padding: 12px; border-radius: 12px; font-weight: 800; font-size: 0.95rem; cursor: pointer;
         }
     </style>
 </head>
@@ -288,13 +291,9 @@
         <video id="introVideo" src="intro.mp4" poster="icon.jpeg" autoplay muted playsinline preload="auto"></video>
     </div>
 
-    <!-- دوو فایلی دەنگی جیاواز -->
-    <audio id="newQueueAlert" src="alert.mpeg" preload="auto"></audio>
-    <audio id="cancelQueueAlert" src="cancel.mpeg" preload="auto"></audio>
-
     <div id="loginModal" class="modal-overlay hidden">
         <div class="modal-box">
-            <h3 style="color: var(--gold-primary); margin-bottom: 8px;">🔐 چوونەژوورەوەی وەستا</h3>
+            <h3 style="color: var(--sky-primary); margin-bottom: 8px;">🔐 چوونەژوورەوەی وەستا</h3>
             <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px;">تکایە ناوی بەکارهێنەر و وشەی نهێنی بنووسە:</p>
             <div class="form-group" style="text-align: right;">
                 <label>ناوی بەکارهێنەر (Username)</label>
@@ -310,7 +309,7 @@
 
     <div id="priceModal" class="modal-overlay hidden">
         <div class="modal-box">
-            <h3 style="color: var(--gold-primary); margin-bottom: 6px;">💰 دیاریکردنی نرخ و کات</h3>
+            <h3 style="color: var(--sky-primary); margin-bottom: 6px;">💰 دیاریکردنی نرخ و کات</h3>
             <p id="modalCustName" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px;"></p>
             
             <div class="form-group" style="text-align: right;">
@@ -335,7 +334,7 @@
 <div class="container">
     <div class="header">
         <div class="live-dot"><span></span> لایڤ</div>
-        <button class="admin-toggle-btn hidden" id="logoutBtn" onclick="handleAdminLogout()" style="position: absolute; top: 12px; right: 12px; background: rgba(244,63,94,0.15); border: 1px solid rgba(244,63,94,0.3); color: var(--danger); padding: 5px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; cursor: pointer;">🚪 دەرچوون</button>
+        <button class="admin-toggle-btn hidden" id="logoutBtn" onclick="handleAdminLogout()" style="position: absolute; top: 12px; right: 12px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: var(--danger); padding: 5px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; cursor: pointer;">🚪 دەرچوون</button>
         <div class="logo-area">
             <img src="icon.jpeg" alt="Abdulla Dalak">
         </div>
@@ -348,13 +347,6 @@
         <div class="barber-status-bar">
             <div class="status-indicator" id="statusDisplayIndicator">🔴 وەستا لە دوکان نییە</div>
             <button class="status-btn offline" id="statusToggleBtn" onclick="toggleBarberPresence()">گۆڕینی دۆخ</button>
-        </div>
-
-        <div class="tabs">
-            <button class="tab-btn active" id="tabTodayBtn" onclick="switchTab('today')">📋 نۆرەکان</button>
-            <button class="tab-btn" id="tabDoneBtn" onclick="switchTab('doneList')">✅ تەواوبوو</button>
-            <button class="tab-btn" id="tabHistoryBtn" onclick="switchTab('history')">📊 داهات</button>
-            <button class="tab-btn" id="tabQrBtn" onclick="switchTab('qrCode')">📱 بارکۆد</button>
         </div>
 
         <div id="todaySection">
@@ -381,7 +373,6 @@
                 </div>
 
                 <button class="btn-submit" onclick="addCustomerByBarber()">➕ زیادکردن بۆ نۆرە</button>
-                <button class="btn-outline" style="width:100%; margin-top:8px;" onclick="enableAudioSound()">🔊 چالاککردن و تاقیکردنەوەی زەنگ و تێلێگرام</button>
             </div>
 
             <div class="section-header">
@@ -425,7 +416,7 @@
 
         <div id="qrSection" class="hidden">
             <div class="glass-panel qr-box">
-                <h2 style="color: var(--gold-primary); font-size: 1.2rem; margin-bottom: 6px;">📱 بارکۆدی نۆرەگرتنی ماڵەوە</h2>
+                <h2 style="color: var(--sky-primary); font-size: 1.2rem; margin-bottom: 6px;">📱 بارکۆدی نۆرەگرتنی ماڵەوە</h2>
                 <p style="font-size: 0.83rem; color: var(--text-muted); line-height: 1.5;">موشتەری بەم بارکۆدە دەتوانێت لە ماڵەوە سەرە بۆ خۆی دابنێت.</p>
                 <div class="qr-image-wrap">
                     <img id="qrCodeImg" src="" alt="QR Code">
@@ -439,16 +430,16 @@
 
     <!-- ==================== بەشی موشتەری ==================== -->
     <div id="customerAppView" class="hidden">
-        <div class="queue-banner" id="barberStatusBanner" style="background: rgba(244, 63, 94, 0.15); border-color: rgba(244, 63, 94, 0.4); color: var(--danger);">
+        <div class="queue-banner" id="barberStatusBanner" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.2); color: var(--danger);">
             🔴 وەستا لە سەرتاشخانە نییە
         </div>
 
-        <div class="queue-banner" style="background: rgba(16, 185, 129, 0.12); border-color: rgba(16, 185, 129, 0.3); color: var(--success);">
+        <div class="queue-banner" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.2); color: var(--success);">
             ⏳ ئێستا <span id="custWaitingCount">0</span> کەس لە نۆرەدان
         </div>
 
         <div class="glass-panel" id="custBookingForm">
-            <h2 style="color: var(--gold-primary); font-size: 1.15rem; margin-bottom: 12px; text-align: center;">✂️ گرتنی نۆرە لە ماڵەوە</h2>
+            <h2 style="color: var(--sky-primary); font-size: 1.15rem; margin-bottom: 12px; text-align: center;">✂️ گرتنی نۆرە لە ماڵەوە</h2>
             <div class="form-group">
                 <label>ناوی خۆت بنووسە</label>
                 <input type="text" id="onlineCustName" class="input-field" placeholder="بۆ نموونە: محەمەد ئەحمەد">
@@ -462,11 +453,11 @@
 
         <div class="glass-panel hidden" id="custTicketView">
             <div class="ticket-box">
-                <div style="font-size: 0.9rem; color: var(--gold-light); font-weight: 700;">نۆرەکەت بە سەرکەوتوویی تۆمار کرا!</div>
+                <div style="font-size: 0.9rem; color: var(--sky-primary); font-weight: 700;">نۆرەکەت بە سەرکەوتوویی تۆمار کرا!</div>
                 <div class="ticket-num" id="myTicketNumber">#1</div>
-                <div style="font-size: 1.05rem; font-weight: 800; color: white; margin-bottom: 8px;" id="myTicketName"></div>
+                <div style="font-size: 1.05rem; font-weight: 800; color: var(--text-dark); margin-bottom: 8px;" id="myTicketName"></div>
                 <div style="font-size: 0.88rem; color: var(--success); font-weight: 700;" id="peopleAheadText">0 کەس لە پێشت ماوە</div>
-                <div style="font-size: 0.92rem; color: var(--gold-primary); margin-top: 8px; font-weight: 700;" id="myAssignedTime"></div>
+                <div style="font-size: 0.92rem; color: var(--sky-primary); margin-top: 8px; font-weight: 700;" id="myAssignedTime"></div>
             </div>
             <button class="btn-outline" style="width: 100%; margin-top: 12px; border-color: var(--danger); color: var(--danger);" onclick="cancelMyTicket()">❌ هەڵوەشاندنەوەی نۆرەکەم</button>
         </div>
@@ -478,24 +469,27 @@
     </div>
 </div>
 
+<!-- Navigation خوارەوە -->
+<div class="tabs" id="bottomNavMenu">
+    <button class="tab-btn active" id="tabTodayBtn" onclick="switchTab('today')">📋 نۆرەکان</button>
+    <button class="tab-btn" id="tabDoneBtn" onclick="switchTab('doneList')">✅ تەواوبوو</button>
+    <button class="tab-btn" id="tabHistoryBtn" onclick="switchTab('history')">📊 داهات</button>
+    <button class="tab-btn" id="tabQrBtn" onclick="switchTab('qrCode')">📱 بارکۆد</button>
+</div>
+
 <script>
     const ADMIN_USER = "admin";
     const ADMIN_PASS = "1234";
 
-    // ================= ڕێکخستنی بۆتی تێلێگرام (ڕاستکراوەوە) =================
-    const TG_BOT_TOKEN = "9184875316:AAFpJZWDkHIqb1FUT_VDnwmccQ9zOO7ihok";
+    // ================= ڕێکخستنی دوو بۆتی تێلێگرام =================
+    const TG_BOOK_TOKEN = "9184875316:AAFpJZWDkHIqb1FUT_VDnwmccQ9zOO7ihok"; // بۆتی نۆرەی نوێ
+    const TG_CANCEL_TOKEN = "9112638372:AAG2fokRFyYfQiHM-9QJBJ8wVKT90CjKhnQ"; // بۆتی ڕەفزکردنەوە
     const TG_CHAT_ID = "1122860781";
 
-    function sendTelegramAlert(messageText) {
-        const url = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage?chat_id=${TG_CHAT_ID}&parse_mode=HTML&text=${encodeURIComponent(messageText)}`;
-        fetch(url)
-            .then(res => res.json())
-            .then(data => {
-                if (!data.ok) {
-                    console.error("Telegram Error:", data.description);
-                }
-            })
-            .catch(err => console.error("Telegram Error:", err));
+    function sendTelegramAlert(token, messageText) {
+        if (!token) return;
+        const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${TG_CHAT_ID}&parse_mode=HTML&text=${encodeURIComponent(messageText)}`;
+        fetch(url).catch(err => console.error("Telegram Error:", err));
     }
 
     const introVid = document.getElementById('introVideo');
@@ -536,23 +530,27 @@
         const custView = document.getElementById('customerAppView');
         const loginModal = document.getElementById('loginModal');
         const logoutBtn = document.getElementById('logoutBtn');
+        const bottomNav = document.getElementById('bottomNavMenu');
 
         if (isCustomerMode) {
             barberView.classList.add('hidden');
             custView.classList.remove('hidden');
             loginModal.classList.add('hidden');
             logoutBtn.classList.add('hidden');
+            bottomNav.classList.add('hidden');
         } else {
             if (isBarberLoggedIn) {
                 barberView.classList.remove('hidden');
                 custView.classList.add('hidden');
                 loginModal.classList.add('hidden');
                 logoutBtn.classList.remove('hidden');
+                bottomNav.classList.remove('hidden');
             } else {
                 barberView.classList.add('hidden');
                 custView.classList.add('hidden');
                 loginModal.classList.remove('hidden');
                 logoutBtn.classList.add('hidden');
+                bottomNav.classList.add('hidden');
             }
         }
     }
@@ -585,78 +583,8 @@
     document.getElementById('currentDateText').innerText = todayStr;
 
     let records = [];
-    let initialLoadDone = false;
-    let editingRecordId = null;
     let isBarberOnline = false;
-
-    // ================= بزوێنەری دەنگ (فایلی دەنگی + پاڵپشتی Web Audio API بۆ ئایفۆن) =================
-    let audioCtx = null;
-
-    function initAudioEngine() {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        if (!audioCtx && AudioContext) {
-            audioCtx = new AudioContext();
-        }
-        if (audioCtx && audioCtx.state === 'suspended') {
-            audioCtx.resume();
-        }
-    }
-
-    document.addEventListener('touchstart', initAudioEngine, { once: true });
-    document.addEventListener('click', initAudioEngine, { once: true });
-
-    function playFallbackBeep(type) {
-        try {
-            initAudioEngine();
-            if (!audioCtx) return;
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-            if (type === 'new') {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(880, audioCtx.currentTime);
-                osc.frequency.setValueAtTime(1320, audioCtx.currentTime + 0.15);
-            } else {
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-                osc.frequency.setValueAtTime(220, audioCtx.currentTime + 0.2);
-            }
-            gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.5);
-        } catch(e) {}
-    }
-
-    function playNewQueueSound() {
-        if (isCustomerMode || !isBarberLoggedIn) return;
-        const audio = document.getElementById('newQueueAlert');
-        if (audio) {
-            audio.currentTime = 0;
-            audio.play().catch(() => playFallbackBeep('new'));
-        } else {
-            playFallbackBeep('new');
-        }
-    }
-
-    function playCancelSound() {
-        if (isCustomerMode || !isBarberLoggedIn) return;
-        const audio = document.getElementById('cancelQueueAlert');
-        if (audio) {
-            audio.currentTime = 0;
-            audio.play().catch(() => playFallbackBeep('cancel'));
-        } else {
-            playFallbackBeep('cancel');
-        }
-    }
-
-    function enableAudioSound() {
-        initAudioEngine();
-        playNewQueueSound();
-        setTimeout(playCancelSound, 1000);
-        sendTelegramAlert("🔔 <b>تاقیکردنەوەی زەنگ و بۆتی تێلێگرام سەرکەوتوو بوو!</b>");
-    }
+    let editingRecordId = null;
 
     statusRef.on('value', (snapshot) => {
         isBarberOnline = snapshot.val() === true;
@@ -677,7 +605,7 @@
             if (toggleBtn) { toggleBtn.innerText = 'دیاریکردن وەک (لەوێ نیم)'; toggleBtn.className = 'status-btn online'; }
             if (banner) {
                 banner.innerHTML = '🟢 وەستا لە سەرتاشخانەیە و پێشوازی دەکات';
-                banner.style.background = 'rgba(16, 185, 129, 0.12)';
+                banner.style.background = 'rgba(16, 185, 129, 0.1)';
                 banner.style.borderColor = 'rgba(16, 185, 129, 0.3)';
                 banner.style.color = 'var(--success)';
             }
@@ -686,8 +614,8 @@
             if (toggleBtn) { toggleBtn.innerText = 'دیاریکردن وەک (لە دوکانم)'; toggleBtn.className = 'status-btn offline'; }
             if (banner) {
                 banner.innerHTML = '🔴 وەستا لە ئێستادا لە سەرتاشخانە نییە';
-                banner.style.background = 'rgba(244, 63, 94, 0.15)';
-                banner.style.borderColor = 'rgba(244, 63, 94, 0.4)';
+                banner.style.background = 'rgba(239, 68, 68, 0.1)';
+                banner.style.borderColor = 'rgba(239, 68, 68, 0.2)';
                 banner.style.color = 'var(--danger)';
             }
         }
@@ -695,18 +623,8 @@
 
     recordsRef.on('value', (snapshot) => {
         const data = snapshot.val();
-        const newRecords = data ? Object.values(data) : [];
-        newRecords.sort((a, b) => a.timestamp - b.timestamp);
-
-        if (initialLoadDone && !isCustomerMode && isBarberLoggedIn) {
-            if (newRecords.length > records.length) {
-                playNewQueueSound();
-            } else if (newRecords.length < records.length) {
-                playCancelSound();
-            }
-        }
-        records = newRecords;
-        initialLoadDone = true;
+        records = data ? Object.values(data) : [];
+        records.sort((a, b) => a.timestamp - b.timestamp);
 
         if (isCustomerMode) {
             renderCustomerView();
@@ -800,12 +718,23 @@
     function bookFromHome() {
         const nameInput = document.getElementById('onlineCustName');
         const phoneInput = document.getElementById('onlineCustPhone');
-
         const name = nameInput.value.trim();
         const phone = phoneInput.value.trim();
 
         if (!name || !phone) {
             alert('تکایە ناو و ژمارەی مۆبایلەکەت بە تەواوی بنووسە!');
+            return;
+        }
+
+        const now = new Date();
+        const todayList = records.filter(item => isSameDay(new Date(item.timestamp), now));
+        const pendingList = todayList.filter(item => !item.completed);
+
+        const myActiveId = Number(localStorage.getItem('my_active_ticket_id'));
+        const existingMyTicket = pendingList.find(item => item.id === myActiveId);
+
+        if (existingMyTicket) {
+            alert('تۆ پێشتر نۆرەیەکت تۆمار کردووە و تاوەکو وەستا نۆرەکەت نەبڕێتەوە یان خۆت هەڵیبوەشێنیتەوە، ناتوانیت نۆرەیەکی تر دابنێیت!');
             return;
         }
 
@@ -818,9 +747,8 @@
         localStorage.setItem('my_active_ticket_id', id);
         nameInput.value = ''; phoneInput.value = '';
 
-        // ناردنی نۆتیفیکەیشنی ڕاستەوخۆ بۆ تێلێگرام
         const timeStr = new Date().toLocaleTimeString('ku-IQ', { hour: '2-digit', minute: '2-digit' });
-        sendTelegramAlert(`✂️ <b>نۆرەی نوێ هات!</b>\n━━━━━━━━━━━━━━\n👤 <b>ناو:</b> ${name}\n📞 <b>مۆبایل:</b> ${phone}\n⏰ <b>کات:</b> ${timeStr}`);
+        sendTelegramAlert(TG_BOOK_TOKEN, `✂️ <b>نۆرەی نوێ هات!</b>\n━━━━━━━━━━━━━━\n👤 <b>ناو:</b> ${name}\n📞 <b>مۆبایل:</b> ${phone}\n⏰ <b>کات:</b> ${timeStr}`);
     }
 
     function cancelMyTicket() {
@@ -833,8 +761,7 @@
             recordsRef.child(myId).remove();
             localStorage.removeItem('my_active_ticket_id');
 
-            // ناردنی ئاگادارکردنەوەی هەڵوەشاندنەوە بۆ تێلێگرام
-            sendTelegramAlert(`❌ <b>نۆرە هەڵوەشایەوە!</b>\n━━━━━━━━━━━━━━\n👤 <b>ناو:</b> ${custName}\n📞 <b>مۆبایل:</b> ${custPhone}`);
+            sendTelegramAlert(TG_CANCEL_TOKEN, `❌ <b>نۆرە هەڵوەشایەوە!</b>\n━━━━━━━━━━━━━━\n👤 <b>ناو:</b> ${custName}\n📞 <b>مۆبایل:</b> ${custPhone}`);
         }
     }
 
@@ -848,6 +775,8 @@
 
     function deleteRecord(id) {
         if (confirm('دڵنیایت لە سڕینەوەی ئەم ناوە؟')) {
+            const myId = Number(localStorage.getItem('my_active_ticket_id'));
+            if (id === myId) localStorage.removeItem('my_active_ticket_id');
             recordsRef.child(id).remove();
         }
     }
@@ -901,7 +830,7 @@
                 const callHTML = item.phone ? `<a href="tel:${item.phone}" class="btn-icon btn-call" title="تەلەفۆن">📞</a>` : '';
                 const waPhone = item.phone ? item.phone.replace(/^0/, '+964') : '';
                 const waHTML = item.phone ? `<a href="https://wa.me/${waPhone}" target="_blank" class="btn-icon btn-whatsapp" title="واتسئاپ">💬</a>` : '';
-                const notifyHTML = item.phone ? `<button class="btn-icon" style="background: rgba(59,130,246,0.15); color: #3b82f6;" onclick="notifyCustomerWhatsApp('${item.phone}', '${item.name}', '${item.appTime || ''}')" title="ئاگادارکردنەوەی نزیکبوونەوەی نۆرە">🔔</button>` : '';
+                const notifyHTML = item.phone ? `<button class="btn-icon" style="background: rgba(2,132,199,0.15); color: var(--sky-primary);" onclick="notifyCustomerWhatsApp('${item.phone}', '${item.name}', '${item.appTime || ''}')" title="ئاگادارکردنەوەی نزیکبوونەوەی نۆرە">🔔</button>` : '';
                 const onlineTag = item.bookedOnline ? `<span class="online-badge">🌐 ئۆنلاین</span>` : '';
 
                 const hasPrice = item.price && item.price > 0;
@@ -960,7 +889,7 @@
                     <div class="action-buttons">
                         ${callHTML}
                         ${waHTML}
-                        <button class="btn-icon btn-done" onclick="toggleComplete(${item.id}, ${item.completed}, ${item.price || 0}, '${item.name}', '${item.appTime || ''}')" style="background: rgba(16,185,129,0.3);">✅</button>
+                        <button class="btn-icon btn-done" onclick="toggleComplete(${item.id}, ${item.completed}, ${item.price || 0}, '${item.name}', '${item.appTime || ''}')" style="background: rgba(16,185,129,0.2);">✅</button>
                         <button class="btn-icon btn-delete" onclick="deleteRecord(${item.id})">🗑️</button>
                     </div>
                 `;
@@ -981,6 +910,10 @@
 
         const formEl = document.getElementById('custBookingForm');
         const ticketEl = document.getElementById('custTicketView');
+
+        if (myId && myIndex === -1) {
+            localStorage.removeItem('my_active_ticket_id');
+        }
 
         if (myIndex !== -1) {
             const myData = pendingList[myIndex];
@@ -1004,7 +937,7 @@
                 const isMe = item.id === myId;
                 const card = document.createElement('div');
                 card.className = 'customer-card';
-                if (isMe) card.style.borderColor = 'var(--gold-primary)';
+                if (isMe) card.style.borderColor = 'var(--sky-primary)';
 
                 card.innerHTML = `
                     <div class="customer-info">
