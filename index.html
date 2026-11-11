@@ -126,8 +126,8 @@
             cursor: pointer;
         }
 
-        .status-btn.online { background: rgba(16, 185, 129, 0.2); color: var(--success); border: 1px solid --success; }
-        .status-btn.offline { background: rgba(244, 63, 94, 0.2); color: var(--danger); border: 1px solid --danger; }
+        .status-btn.online { background: rgba(16, 185, 129, 0.2); color: var(--success); border: 1px solid var(--success); }
+        .status-btn.offline { background: rgba(244, 63, 94, 0.2); color: var(--danger); border: 1px solid var(--danger); }
 
         .tabs {
             display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;
@@ -288,7 +288,7 @@
         <video id="introVideo" src="intro.mp4" poster="icon.jpeg" autoplay muted playsinline preload="auto"></video>
     </div>
 
-    <!-- دو فایلی دەنگی جیاواز -->
+    <!-- دوو فایلی دەنگی جیاواز -->
     <audio id="newQueueAlert" src="alert.mpeg" preload="auto"></audio>
     <audio id="cancelQueueAlert" src="cancel.mpeg" preload="auto"></audio>
 
@@ -335,7 +335,7 @@
 <div class="container">
     <div class="header">
         <div class="live-dot"><span></span> لایڤ</div>
-        <button class="admin-toggle-btn" id="logoutBtn" onclick="handleAdminLogout()" style="position: absolute; top: 12px; right: 12px; background: rgba(244,63,94,0.15); border: 1px solid rgba(244,63,94,0.3); color: var(--danger); padding: 5px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; cursor: pointer;" class="hidden">🚪 دەرچوون</button>
+        <button class="admin-toggle-btn hidden" id="logoutBtn" onclick="handleAdminLogout()" style="position: absolute; top: 12px; right: 12px; background: rgba(244,63,94,0.15); border: 1px solid rgba(244,63,94,0.3); color: var(--danger); padding: 5px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; cursor: pointer;">🚪 دەرچوون</button>
         <div class="logo-area">
             <img src="icon.jpeg" alt="Abdulla Dalak">
         </div>
@@ -381,7 +381,7 @@
                 </div>
 
                 <button class="btn-submit" onclick="addCustomerByBarber()">➕ زیادکردن بۆ نۆرە</button>
-                <button class="btn-outline" style="width:100%; margin-top:8px;" onclick="enableAudioSound()">🔊 چالاککردن و تاقیکردنەوەی دەنگەکان</button>
+                <button class="btn-outline" style="width:100%; margin-top:8px;" onclick="enableAudioSound()">🔊 چالاککردن و تاقیکردنەوەی زەنگ و تێلێگرام</button>
             </div>
 
             <div class="section-header">
@@ -482,6 +482,23 @@
     const ADMIN_USER = "admin";
     const ADMIN_PASS = "1234";
 
+    // ================= ڕێکخستنی بۆتی تێلێگرام =================
+    const TG_BOT_TOKEN = "9184875316:AAFpJZWDKhIQb1FUT_VDnwmccQ9zOO7ihok";
+    const TG_CHAT_ID = "1122860781";
+
+    function sendTelegramAlert(messageText) {
+        const url = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
+        fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: TG_CHAT_ID,
+                text: messageText,
+                parse_mode: 'HTML'
+            })
+        }).catch(err => console.error("Telegram Error:", err));
+    }
+
     const introVid = document.getElementById('introVideo');
     const removeSplash = () => {
         const splash = document.getElementById('splashScreen');
@@ -573,21 +590,73 @@
     let editingRecordId = null;
     let isBarberOnline = false;
 
+    // ================= بزوێنەری دەنگ (فایلی دەنگی + پاڵپشتی Web Audio API بۆ ئایفۆن) =================
+    let audioCtx = null;
+
+    function initAudioEngine() {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!audioCtx && AudioContext) {
+            audioCtx = new AudioContext();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+    }
+
+    document.addEventListener('touchstart', initAudioEngine, { once: true });
+    document.addEventListener('click', initAudioEngine, { once: true });
+
+    function playFallbackBeep(type) {
+        try {
+            initAudioEngine();
+            if (!audioCtx) return;
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            if (type === 'new') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+                osc.frequency.setValueAtTime(1320, audioCtx.currentTime + 0.15);
+            } else {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+                osc.frequency.setValueAtTime(220, audioCtx.currentTime + 0.2);
+            }
+            gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.5);
+        } catch(e) {}
+    }
+
     function playNewQueueSound() {
         if (isCustomerMode || !isBarberLoggedIn) return;
         const audio = document.getElementById('newQueueAlert');
-        if (audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
+        if (audio) {
+            audio.currentTime = 0;
+            audio.play().catch(() => playFallbackBeep('new'));
+        } else {
+            playFallbackBeep('new');
+        }
     }
 
     function playCancelSound() {
         if (isCustomerMode || !isBarberLoggedIn) return;
         const audio = document.getElementById('cancelQueueAlert');
-        if (audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
+        if (audio) {
+            audio.currentTime = 0;
+            audio.play().catch(() => playFallbackBeep('cancel'));
+        } else {
+            playFallbackBeep('cancel');
+        }
     }
 
     function enableAudioSound() {
+        initAudioEngine();
         playNewQueueSound();
         setTimeout(playCancelSound, 1000);
+        sendTelegramAlert("🔔 <b>تاقیکردنەوەی زەنگ و بۆتی تێلێگرام سەرکەوتوو بوو!</b>");
     }
 
     statusRef.on('value', (snapshot) => {
@@ -749,13 +818,24 @@
 
         localStorage.setItem('my_active_ticket_id', id);
         nameInput.value = ''; phoneInput.value = '';
+
+        // ناردنی نۆتیفیکەیشنی ڕاستەوخۆ بۆ تێلێگرام
+        const timeStr = new Date().toLocaleTimeString('ku-IQ', { hour: '2-digit', minute: '2-digit' });
+        sendTelegramAlert(`✂️ <b>نۆرەی نوێ هات!</b>\n━━━━━━━━━━━━━━\n👤 <b>ناو:</b> ${name}\n📞 <b>مۆبایل:</b> ${phone}\n⏰ <b>کات:</b> ${timeStr}`);
     }
 
     function cancelMyTicket() {
-        const myId = localStorage.getItem('my_active_ticket_id');
+        const myId = Number(localStorage.getItem('my_active_ticket_id'));
         if (myId && confirm('دڵنیایت دەتەوێت نۆرەکەت هەڵبوەشێنیتەوە؟')) {
+            const myRecord = records.find(r => r.id === myId);
+            const custName = myRecord ? myRecord.name : 'موشتەری';
+            const custPhone = myRecord ? myRecord.phone : 'دیاری نەکراوە';
+
             recordsRef.child(myId).remove();
             localStorage.removeItem('my_active_ticket_id');
+
+            // ناردنی ئاگادارکردنەوەی هەڵوەشاندنەوە بۆ تێلێگرام
+            sendTelegramAlert(`❌ <b>نۆرە هەڵوەشایەوە!</b>\n━━━━━━━━━━━━━━\n👤 <b>ناو:</b> ${custName}\n📞 <b>مۆبایل:</b> ${custPhone}`);
         }
     }
 
