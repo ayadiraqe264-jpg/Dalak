@@ -126,8 +126,8 @@
             cursor: pointer;
         }
 
-        .status-btn.online { background: rgba(16, 185, 129, 0.2); color: var(--success); border: 1px solid var(--success); }
-        .status-btn.offline { background: rgba(244, 63, 94, 0.2); color: var(--danger); border: 1px solid var(--danger); }
+        .status-btn.online { background: rgba(16, 185, 129, 0.2); color: var(--success); border: 1px solid --success; }
+        .status-btn.offline { background: rgba(244, 63, 94, 0.2); color: var(--danger); border: 1px solid --danger; }
 
         .tabs {
             display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;
@@ -292,7 +292,6 @@
     <audio id="newQueueAlert" src="alert.mpeg" preload="auto"></audio>
     <audio id="cancelQueueAlert" src="cancel.mpeg" preload="auto"></audio>
 
-    <!-- پەنجەرەی لۆگینی وەستا (Username & Password) -->
     <div id="loginModal" class="modal-overlay hidden">
         <div class="modal-box">
             <h3 style="color: var(--gold-primary); margin-bottom: 8px;">🔐 چوونەژوورەوەی وەستا</h3>
@@ -309,7 +308,6 @@
         </div>
     </div>
 
-    <!-- پەنجەرەی دیاریکردنی نرخ و کات -->
     <div id="priceModal" class="modal-overlay hidden">
         <div class="modal-box">
             <h3 style="color: var(--gold-primary); margin-bottom: 6px;">💰 دیاریکردنی نرخ و کات</h3>
@@ -481,7 +479,6 @@
 </div>
 
 <script>
-    // ⚙️ ناوی بەکارهێنەر و وشەی نهێنی وەستا (دەتوانیت لێرەبیگۆڕیت)
     const ADMIN_USER = "admin";
     const ADMIN_PASS = "1234";
 
@@ -516,7 +513,7 @@
     const customerBookingUrl = window.location.origin + window.location.pathname + '?mode=customer';
     document.getElementById('qrCodeImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(customerBookingUrl)}`;
 
-    let isBarberLoggedIn = localStorage.getItem('barber_logged_in') === 'true';
+    let isBarberLoggedIn = sessionStorage.getItem('barber_logged_in') === 'true';
 
     function updateViewMode() {
         const barberView = document.getElementById('barberAppView');
@@ -550,7 +547,7 @@
         const p = document.getElementById('adminPass').value.trim();
 
         if (u === ADMIN_USER && p === ADMIN_PASS) {
-            localStorage.setItem('barber_logged_in', 'true');
+            sessionStorage.setItem('barber_logged_in', 'true');
             isBarberLoggedIn = true;
             updateViewMode();
             renderQueue();
@@ -562,7 +559,7 @@
 
     function handleAdminLogout() {
         if (confirm('دەتەوێت لە ئەپەکە دەربچیت؟')) {
-            localStorage.removeItem('barber_logged_in');
+            sessionStorage.removeItem('barber_logged_in');
             isBarberLoggedIn = false;
             updateViewMode();
         }
