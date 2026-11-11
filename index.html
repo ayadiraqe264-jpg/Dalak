@@ -98,7 +98,6 @@
         .header h1 { font-size: 1.4rem; color: var(--gold-primary); font-weight: 800; }
         .header p { font-size: 0.8rem; color: var(--text-muted); margin-top: 3px; }
 
-        /* دۆخی ئامادەبوونی وەستا */
         .barber-status-bar {
             background: rgba(15, 23, 42, 0.85);
             border: 1px solid var(--glass-border);
@@ -289,10 +288,28 @@
         <video id="introVideo" src="intro.mp4" poster="icon.jpeg" autoplay muted playsinline preload="auto"></video>
     </div>
 
-    <!-- فایل دەنگی زەنگ بۆ نۆرەی نوێ و هەڵوەشاندنەوە -->
-    <audio id="customVoiceAlert" src="alert.mpeg" preload="auto"></audio>
+    <!-- دو فایلی دەنگی جیاواز -->
+    <audio id="newQueueAlert" src="alert.mpeg" preload="auto"></audio>
+    <audio id="cancelQueueAlert" src="cancel.mpeg" preload="auto"></audio>
 
-    <!-- پەنجەرەی دیاریکردنی نرخ و کات بۆ وەستا -->
+    <!-- پەنجەرەی لۆگینی وەستا (Username & Password) -->
+    <div id="loginModal" class="modal-overlay hidden">
+        <div class="modal-box">
+            <h3 style="color: var(--gold-primary); margin-bottom: 8px;">🔐 چوونەژوورەوەی وەستا</h3>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px;">تکایە ناوی بەکارهێنەر و وشەی نهێنی بنووسە:</p>
+            <div class="form-group" style="text-align: right;">
+                <label>ناوی بەکارهێنەر (Username)</label>
+                <input type="text" id="adminUser" class="input-field" placeholder="admin" dir="ltr" style="margin-bottom: 10px;">
+            </div>
+            <div class="form-group" style="text-align: right;">
+                <label>وشەی نهێنی (Password)</label>
+                <input type="password" id="adminPass" class="input-field" placeholder="••••" dir="ltr" style="margin-bottom: 14px;">
+            </div>
+            <button class="btn-submit" onclick="handleAdminLogin()">🔓 چوونەژوورەوە</button>
+        </div>
+    </div>
+
+    <!-- پەنجەرەی دیاریکردنی نرخ و کات -->
     <div id="priceModal" class="modal-overlay hidden">
         <div class="modal-box">
             <h3 style="color: var(--gold-primary); margin-bottom: 6px;">💰 دیاریکردنی نرخ و کات</h3>
@@ -320,6 +337,7 @@
 <div class="container">
     <div class="header">
         <div class="live-dot"><span></span> لایڤ</div>
+        <button class="admin-toggle-btn" id="logoutBtn" onclick="handleAdminLogout()" style="position: absolute; top: 12px; right: 12px; background: rgba(244,63,94,0.15); border: 1px solid rgba(244,63,94,0.3); color: var(--danger); padding: 5px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; cursor: pointer;" class="hidden">🚪 دەرچوون</button>
         <div class="logo-area">
             <img src="icon.jpeg" alt="Abdulla Dalak">
         </div>
@@ -327,13 +345,10 @@
         <p id="currentDateText"></p>
     </div>
 
-    <!-- ==================== بەشی تایبەت بە وەستا (ADMIN VIEW) ==================== -->
+    <!-- ==================== بەشی وەستا ==================== -->
     <div id="barberAppView" class="hidden">
-        <!-- تابلۆی کۆنتڕۆڵی ئامادەبوونی وەستا -->
         <div class="barber-status-bar">
-            <div class="status-indicator" id="statusDisplayIndicator">
-                🔴 وەستا لە دوکان نییە
-            </div>
+            <div class="status-indicator" id="statusDisplayIndicator">🔴 وەستا لە دوکان نییە</div>
             <button class="status-btn offline" id="statusToggleBtn" onclick="toggleBarberPresence()">گۆڕینی دۆخ</button>
         </div>
 
@@ -368,7 +383,7 @@
                 </div>
 
                 <button class="btn-submit" onclick="addCustomerByBarber()">➕ زیادکردن بۆ نۆرە</button>
-                <button class="btn-outline" style="width:100%; margin-top:8px;" onclick="enableAudioSound()">🔊 چالاککردن و تاقیکردنەوەی دەنگی زەنگ</button>
+                <button class="btn-outline" style="width:100%; margin-top:8px;" onclick="enableAudioSound()">🔊 چالاککردن و تاقیکردنەوەی دەنگەکان</button>
             </div>
 
             <div class="section-header">
@@ -413,9 +428,7 @@
         <div id="qrSection" class="hidden">
             <div class="glass-panel qr-box">
                 <h2 style="color: var(--gold-primary); font-size: 1.2rem; margin-bottom: 6px;">📱 بارکۆدی نۆرەگرتنی ماڵەوە</h2>
-                <p style="font-size: 0.83rem; color: var(--text-muted); line-height: 1.5;">
-                    موشتەری بەم بارکۆدە دەتوانێت لە ماڵەوە سەرە بۆ خۆی دابنێت.
-                </p>
+                <p style="font-size: 0.83rem; color: var(--text-muted); line-height: 1.5;">موشتەری بەم بارکۆدە دەتوانێت لە ماڵەوە سەرە بۆ خۆی دابنێت.</p>
                 <div class="qr-image-wrap">
                     <img id="qrCodeImg" src="" alt="QR Code">
                 </div>
@@ -426,9 +439,8 @@
         </div>
     </div>
 
-    <!-- ==================== بەشی تایبەت بە موشتەری (CUSTOMER VIEW) ==================== -->
+    <!-- ==================== بەشی موشتەری ==================== -->
     <div id="customerAppView" class="hidden">
-        <!-- پیشاندانی دۆخی ئامادەبوونی وەستا بۆ موشتەری -->
         <div class="queue-banner" id="barberStatusBanner" style="background: rgba(244, 63, 94, 0.15); border-color: rgba(244, 63, 94, 0.4); color: var(--danger);">
             🔴 وەستا لە سەرتاشخانە نییە
         </div>
@@ -469,6 +481,10 @@
 </div>
 
 <script>
+    // ⚙️ ناوی بەکارهێنەر و وشەی نهێنی وەستا (دەتوانیت لێرەبیگۆڕیت)
+    const ADMIN_USER = "admin";
+    const ADMIN_PASS = "1234";
+
     const introVid = document.getElementById('introVideo');
     const removeSplash = () => {
         const splash = document.getElementById('splashScreen');
@@ -494,26 +510,63 @@
     const recordsRef = db.ref('barber_records');
     const statusRef = db.ref('barber_status');
 
-    // لێرەدا پشت بە لینکی موشتەری دەبەستین (?mode=customer) بۆ جیاکردنەوەی تەواو
     const urlParams = new URLSearchParams(window.location.search);
     const isCustomerMode = urlParams.get('mode') === 'customer';
 
     const customerBookingUrl = window.location.origin + window.location.pathname + '?mode=customer';
     document.getElementById('qrCodeImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(customerBookingUrl)}`;
 
+    let isBarberLoggedIn = localStorage.getItem('barber_logged_in') === 'true';
+
     function updateViewMode() {
         const barberView = document.getElementById('barberAppView');
         const custView = document.getElementById('customerAppView');
+        const loginModal = document.getElementById('loginModal');
+        const logoutBtn = document.getElementById('logoutBtn');
 
         if (isCustomerMode) {
             barberView.classList.add('hidden');
             custView.classList.remove('hidden');
+            loginModal.classList.add('hidden');
+            logoutBtn.classList.add('hidden');
         } else {
-            barberView.classList.remove('hidden');
-            custView.classList.add('hidden');
+            if (isBarberLoggedIn) {
+                barberView.classList.remove('hidden');
+                custView.classList.add('hidden');
+                loginModal.classList.add('hidden');
+                logoutBtn.classList.remove('hidden');
+            } else {
+                barberView.classList.add('hidden');
+                custView.classList.add('hidden');
+                loginModal.classList.remove('hidden');
+                logoutBtn.classList.add('hidden');
+            }
         }
     }
     updateViewMode();
+
+    function handleAdminLogin() {
+        const u = document.getElementById('adminUser').value.trim();
+        const p = document.getElementById('adminPass').value.trim();
+
+        if (u === ADMIN_USER && p === ADMIN_PASS) {
+            localStorage.setItem('barber_logged_in', 'true');
+            isBarberLoggedIn = true;
+            updateViewMode();
+            renderQueue();
+            calculateStats();
+        } else {
+            alert('ناوی بەکارهێنەر یان وشەی نهێنی هەڵەیە!');
+        }
+    }
+
+    function handleAdminLogout() {
+        if (confirm('دەتەوێت لە ئەپەکە دەربچیت؟')) {
+            localStorage.removeItem('barber_logged_in');
+            isBarberLoggedIn = false;
+            updateViewMode();
+        }
+    }
 
     const todayStr = new Date().toLocaleDateString('ckb-IQ', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     document.getElementById('currentDateText').innerText = todayStr;
@@ -523,28 +576,30 @@
     let editingRecordId = null;
     let isBarberOnline = false;
 
-    function playRecordedAlert() {
-        if (isCustomerMode) return;
-        const audio = document.getElementById('customVoiceAlert');
-        if (audio) {
-            audio.currentTime = 0;
-            audio.play().catch(() => {});
-        }
+    function playNewQueueSound() {
+        if (isCustomerMode || !isBarberLoggedIn) return;
+        const audio = document.getElementById('newQueueAlert');
+        if (audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
+    }
+
+    function playCancelSound() {
+        if (isCustomerMode || !isBarberLoggedIn) return;
+        const audio = document.getElementById('cancelQueueAlert');
+        if (audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
     }
 
     function enableAudioSound() {
-        playRecordedAlert();
+        playNewQueueSound();
+        setTimeout(playCancelSound, 1000);
     }
 
-    // گوێگرتن لە دۆخی ئامادەبوونی وەستا
     statusRef.on('value', (snapshot) => {
         isBarberOnline = snapshot.val() === true;
         updateBarberStatusUI();
     });
 
     function toggleBarberPresence() {
-        const newState = !isBarberOnline;
-        statusRef.set(newState);
+        statusRef.set(!isBarberOnline);
     }
 
     function updateBarberStatusUI() {
@@ -573,16 +628,16 @@
         }
     }
 
-    // گوێگرتنی لایڤ لە نۆرەکان
     recordsRef.on('value', (snapshot) => {
         const data = snapshot.val();
         const newRecords = data ? Object.values(data) : [];
         newRecords.sort((a, b) => a.timestamp - b.timestamp);
 
-        // ئاگادارکردنەوەی وەستا ئەگەر کەسێک نۆرەی گرت یان هەڵوەشاندەوە
-        if (initialLoadDone && !isCustomerMode) {
-            if (newRecords.length !== records.length) {
-                playRecordedAlert();
+        if (initialLoadDone && !isCustomerMode && isBarberLoggedIn) {
+            if (newRecords.length > records.length) {
+                playNewQueueSound();
+            } else if (newRecords.length < records.length) {
+                playCancelSound();
             }
         }
         records = newRecords;
@@ -590,7 +645,7 @@
 
         if (isCustomerMode) {
             renderCustomerView();
-        } else {
+        } else if (isBarberLoggedIn) {
             renderQueue();
             calculateStats();
         }
@@ -721,13 +776,14 @@
         }
     }
 
-    function notifyCustomerWhatsApp(phone, name) {
+    function notifyCustomerWhatsApp(phone, name, appTime) {
         if (!phone) {
             alert('ئەم موشتەرییە ژمارە مۆبایلی نییە!');
             return;
         }
         const waPhone = phone.replace(/^0/, '+964');
-        const msg = `سڵاو بەڕێز ${name}، نۆرەکەت لە سەرتاشخانەی عەبدوڵا دەلاک نزیک بووەوە، فەرموو ئێستا وەرە بۆ سەرتاشخانە.`;
+        const timeText = appTime && appTime !== 'دیاری نەکراوە' ? ` کە کاتەکەی بۆ دانرابوو (${appTime})` : '';
+        const msg = `سڵاو بەڕێز ${name}، نۆرەکەت لە سەرتاشخانەی عەبدوڵا دەلاک${timeText} نزیک بووەوە، فەرموو ئێستا وەرە بۆ سەرتاشخانە.`;
         window.open(`https://wa.me/${waPhone}?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
@@ -759,7 +815,7 @@
         const doneList = todayList.filter(item => item.completed);
 
         if (pendingList.length === 0) {
-            queueContainer.innerHTML = `<div class="empty-state">هیچ موشتەرییەک لە لیستی چاوڕوانیدا نییە</div>`;
+            queueContainer.innerHTML = `<div class="empty-state">هیچ موشتەرییەک لە لیستی چاوەڕوانیدا نییە</div>`;
         } else {
             queueContainer.innerHTML = '';
             pendingList.forEach((item, index) => {
@@ -769,7 +825,7 @@
                 const callHTML = item.phone ? `<a href="tel:${item.phone}" class="btn-icon btn-call" title="تەلەفۆن">📞</a>` : '';
                 const waPhone = item.phone ? item.phone.replace(/^0/, '+964') : '';
                 const waHTML = item.phone ? `<a href="https://wa.me/${waPhone}" target="_blank" class="btn-icon btn-whatsapp" title="واتسئاپ">💬</a>` : '';
-                const notifyHTML = item.phone ? `<button class="btn-icon" style="background: rgba(59,130,246,0.15); color: #3b82f6;" onclick="notifyCustomerWhatsApp('${item.phone}', '${item.name}')" title="ئاگادارکردنەوەی نزیکبوونەوەی نۆرە">🔔</button>` : '';
+                const notifyHTML = item.phone ? `<button class="btn-icon" style="background: rgba(59,130,246,0.15); color: #3b82f6;" onclick="notifyCustomerWhatsApp('${item.phone}', '${item.name}', '${item.appTime || ''}')" title="ئاگادارکردنەوەی نزیکبوونەوەی نۆرە">🔔</button>` : '';
                 const onlineTag = item.bookedOnline ? `<span class="online-badge">🌐 ئۆنلاین</span>` : '';
 
                 const hasPrice = item.price && item.price > 0;
