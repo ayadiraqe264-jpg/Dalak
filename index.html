@@ -12,6 +12,11 @@
     <link rel="icon" type="image/jpeg" href="icon.jpeg">
     
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- کتێبخانەی Firebase بۆ پەیوەندی لایڤ -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
     <style>
         :root {
             --royal-dark: #0f172a;
@@ -77,6 +82,36 @@
             border: 1px solid var(--glass-border);
             border-radius: 22px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .live-dot {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.7rem;
+            color: var(--success);
+            background: rgba(16, 185, 129, 0.12);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: 700;
+        }
+
+        .live-dot span {
+            width: 7px;
+            height: 7px;
+            background: var(--success);
+            border-radius: 50%;
+            display: inline-block;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
 
         .header .logo-area {
@@ -108,11 +143,11 @@
             margin-top: 3px;
         }
 
-        /* ناڤیگەیشن باری سێ بەشی (Tabs) */
+        /* ناڤیگەیشن باری ٤ بەشی بۆ وەستا */
         .tabs {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 6px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             padding: 6px;
@@ -125,9 +160,9 @@
         .tab-btn {
             border: none;
             background: transparent;
-            padding: 10px 4px;
-            border-radius: 14px;
-            font-size: 0.82rem;
+            padding: 10px 2px;
+            border-radius: 13px;
+            font-size: 0.76rem;
             font-weight: 700;
             color: var(--text-muted);
             cursor: pointer;
@@ -292,6 +327,18 @@
             font-size: 0.96rem;
             font-weight: 700;
             color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .online-badge {
+            font-size: 0.68rem;
+            background: rgba(16, 185, 129, 0.18);
+            color: var(--success);
+            padding: 2px 7px;
+            border-radius: 8px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
         .customer-meta {
@@ -341,7 +388,7 @@
             border: 1px dashed var(--glass-border);
         }
 
-        .hidden { display: none; }
+        .hidden { display: none !important; }
 
         .export-box {
             display: flex;
@@ -379,6 +426,31 @@
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
 
+        .stat-title {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .stat-money {
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: var(--gold-primary);
+            direction: ltr;
+        }
+
+        .stat-count {
+            font-size: 0.7rem;
+            color: var(--success);
+            font-weight: 700;
+            margin-top: 4px;
+            background: rgba(16, 185, 129, 0.15);
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
         .history-day-card {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
@@ -390,38 +462,72 @@
             align-items: center;
         }
 
-        .history-date {
-            font-weight: 800;
-            font-size: 0.92rem;
-            color: var(--text-light);
+        .history-date { font-weight: 800; font-size: 0.92rem; color: var(--text-light); }
+        .history-stats { text-align: left; }
+        .history-money { font-weight: 800; color: var(--gold-primary); font-size: 0.95rem; direction: ltr; }
+        .history-count { font-size: 0.75rem; color: var(--success); font-weight: 700; }
+
+        /* ستایلی بارکۆد و ڕووکاری موشتەری */
+        .qr-box {
+            text-align: center;
+            padding: 22px 16px;
         }
 
-        .history-stats {
-            text-align: left;
+        .qr-image-wrap {
+            background: white;
+            padding: 14px;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 14px 0;
+            border: 3px solid var(--gold-primary);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.25);
         }
 
-        .history-money {
+        .qr-image-wrap img {
+            width: 210px;
+            height: 210px;
+            display: block;
+        }
+
+        .ticket-box {
+            text-align: center;
+            padding: 24px 16px;
+            border: 2px dashed var(--gold-primary);
+            border-radius: 20px;
+            background: rgba(212, 175, 55, 0.06);
+            margin-top: 14px;
+        }
+
+        .ticket-num {
+            font-size: 2.8rem;
             font-weight: 800;
             color: var(--gold-primary);
-            font-size: 0.95rem;
-            direction: ltr;
+            line-height: 1;
+            margin: 10px 0;
         }
 
-        .history-count {
-            font-size: 0.75rem;
+        .queue-banner {
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.3);
             color: var(--success);
-            font-weight: 700;
+            padding: 12px;
+            border-radius: 16px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1rem;
+            margin-bottom: 14px;
         }
     </style>
 </head>
 <body>
 
     <div id="splashScreen">
-        <video id="introVideo" src="intro.mp4" autoplay muted playsinline></video>
+        <video id="introVideo" src="intro.mp4" poster="icon.jpeg" autoplay muted playsinline preload="auto"></video>
     </div>
 
 <div class="container">
     <div class="header">
+        <div class="live-dot"><span></span> لایڤ</div>
         <div class="logo-area">
             <img src="icon.jpeg" alt="Abdulla Dalak">
         </div>
@@ -429,87 +535,144 @@
         <p id="currentDateText"></p>
     </div>
 
-    <!-- ناڤیگەیشن باری ٣ بەشی لە خوار لۆگۆوە -->
-    <div class="tabs">
-        <button class="tab-btn active" id="tabTodayBtn" onclick="switchTab('today')">📋 نۆرەی ئەمڕۆ</button>
-        <button class="tab-btn" id="tabDoneBtn" onclick="switchTab('doneList')">✅ موشتەرییەکانم</button>
-        <button class="tab-btn" id="tabHistoryBtn" onclick="switchTab('history')">📊 مێژوو و داهات</button>
-    </div>
+    <!-- ==================== بەشی تایبەت بە وەستا (ADMIN VIEW) ==================== -->
+    <div id="barberAppView">
+        <div class="tabs">
+            <button class="tab-btn active" id="tabTodayBtn" onclick="switchTab('today')">📋 نۆرەکان</button>
+            <button class="tab-btn" id="tabDoneBtn" onclick="switchTab('doneList')">✅ تەواوبوو</button>
+            <button class="tab-btn" id="tabHistoryBtn" onclick="switchTab('history')">📊 داهات</button>
+            <button class="tab-btn" id="tabQrBtn" onclick="switchTab('qrCode')">📱 بارکۆد</button>
+        </div>
 
-    <!-- ۱. بەشی نۆرەی ئەمڕۆ و زیادکردنی موشتەری -->
-    <div id="todaySection">
-        <div class="glass-panel">
-            <div class="form-group">
-                <label>ناوی موشتەری (بۆ نووسینی کوردی، مایکی کیبۆرد دابگرە)</label>
-                <input type="text" id="custName" class="input-field" placeholder="ناوی موشتەری بنووسە...">
-                <div class="voice-hint">
-                    💡 <strong>تێبینی:</strong> بۆ نووسینی کوردی بە دەنگ، تەنها دوگمەی مایکرۆفۆنی بچووکی سەر کیبۆردی ئایفۆنەکەت لە خوارەوە دابگرە؛ بە کوردییەکی پەتی دەنووسێت.
+        <!-- ۱. بەشی نۆرەی ئەمڕۆ -->
+        <div id="todaySection">
+            <div class="glass-panel">
+                <div class="form-group">
+                    <label>ناوی موشتەری (بۆ نووسینی کوردی، مایکی کیبۆرد دابگرە)</label>
+                    <input type="text" id="custName" class="input-field" placeholder="ناوی موشتەری بنووسە...">
+                    <div class="voice-hint">
+                        💡 <strong>تێبینی:</strong> بۆ نووسینی کوردی بە دەنگ، مایکرۆفۆنی بچووکی سەر کیبۆردی ئایفۆنەکەت لە خوارەوە دابگرە.
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>ژمارەی مۆبایل</label>
+                    <input type="tel" id="custPhone" class="input-field" placeholder="0750XXXXXXX" dir="ltr">
+                </div>
+
+                <div class="form-group">
+                    <label>نرخ (دینار)</label>
+                    <input type="number" id="custPrice" class="input-field" value="5000" dir="ltr">
+                    <div class="price-chips">
+                        <span class="chip" onclick="setPrice(3000)">3,000</span>
+                        <span class="chip" onclick="setPrice(5000)">5,000</span>
+                        <span class="chip" onclick="setPrice(8000)">8,000</span>
+                        <span class="chip" onclick="setPrice(10000)">10,000</span>
+                        <span class="chip" onclick="setPrice(15000)">15,000</span>
+                    </div>
+                </div>
+
+                <button class="btn-submit" onclick="addCustomerByBarber()">➕ زیادکردن بۆ نۆرە</button>
+            </div>
+
+            <div class="section-header">
+                <span class="section-title">⏳ لیستی چاوەڕوانی ئەمڕۆ</span>
+            </div>
+            <div id="queueContainer" class="queue-list"></div>
+        </div>
+
+        <!-- ۲. بەشی موشتەرییەکانی تەواوبوو -->
+        <div id="doneSection" class="hidden">
+            <div class="section-header">
+                <span class="section-title">✅ موشتەرییەکانی ئەمڕۆم (تەواوبووەکان)</span>
+            </div>
+            <div id="completedContainer" class="queue-list"></div>
+        </div>
+
+        <!-- ۳. بەشی مێژوو و داهات -->
+        <div id="historySection" class="hidden">
+            <div class="stats-grid-report">
+                <div class="stat-card-rep">
+                    <div class="stat-title">ئەمڕۆ</div>
+                    <div class="stat-money" id="todayMoney">0</div>
+                    <div class="stat-count" id="todayCount">0 کەس</div>
+                </div>
+                <div class="stat-card-rep">
+                    <div class="stat-title">ئەم هەفتەیە</div>
+                    <div class="stat-money" id="weekMoney">0</div>
+                    <div class="stat-count" id="weekCount">0 کەس</div>
+                </div>
+                <div class="stat-card-rep">
+                    <div class="stat-title">ئەم مانگە</div>
+                    <div class="stat-money" id="monthMoney">0</div>
+                    <div class="stat-count" id="monthCount">0 کەس</div>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label>ژمارەی مۆبایل</label>
-                <input type="tel" id="custPhone" class="input-field" placeholder="0750XXXXXXX" dir="ltr">
+            <div class="export-box">
+                <button class="btn-outline" onclick="exportCSV()">📥 دابەزاندنی ڕاپۆرت (Excel)</button>
+                <button class="btn-outline" onclick="shareSummary()">📤 ناردنی کورتەی داهات</button>
             </div>
+            <div id="historyContainer"></div>
+        </div>
 
-            <div class="form-group">
-                <label>نرخ (دینار)</label>
-                <input type="number" id="custPrice" class="input-field" value="5000" dir="ltr">
-                <div class="price-chips">
-                    <span class="chip" onclick="setPrice(3000)">3,000</span>
-                    <span class="chip" onclick="setPrice(5000)">5,000</span>
-                    <span class="chip" onclick="setPrice(8000)">8,000</span>
-                    <span class="chip" onclick="setPrice(10000)">10,000</span>
-                    <span class="chip" onclick="setPrice(15000)">15,000</span>
+        <!-- ٤. بەشی بارکۆدی موشتەری -->
+        <div id="qrSection" class="hidden">
+            <div class="glass-panel qr-box">
+                <h2 style="color: var(--gold-primary); font-size: 1.2rem; margin-bottom: 6px;">📱 بارکۆدی نۆرەگرتنی ماڵەوە</h2>
+                <p style="font-size: 0.83rem; color: var(--text-muted); line-height: 1.5;">
+                    موشتەری دەتوانێت بە کامێرای مۆبایلەکەی ئەم بارکۆدە سکان بکات و لینکەکە لای خۆی هەڵبگرێت بۆ ئەوەی هەموو جارێک لە ماڵەوە سەرە بگرێت.
+                </p>
+                <div class="qr-image-wrap">
+                    <img id="qrCodeImg" src="" alt="QR Code">
+                </div>
+                <div class="export-box" style="margin-top: 10px;">
+                    <button class="btn-submit" onclick="shareCustomerLink()">📤 ناردن و کۆپیکردنی لینکی موشتەری</button>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <button class="btn-submit" onclick="addCustomer()">➕ زیادکردن بۆ نۆرە</button>
+    <!-- ==================== بەشی تایبەت بە موشتەری (CUSTOMER VIEW) ==================== -->
+    <div id="customerAppView" class="hidden">
+        <div class="queue-banner" id="custLiveBanner">
+            ⏳ ئێستا <span id="custWaitingCount">0</span> کەس لە نۆرەدان
+        </div>
+
+        <!-- فۆڕمی گرتنی نۆرە بۆ موشتەری -->
+        <div class="glass-panel" id="custBookingForm">
+            <h2 style="color: var(--gold-primary); font-size: 1.15rem; margin-bottom: 12px; text-align: center;">✂️ گرتنی نۆرە لە ماڵەوە</h2>
+            <div class="form-group">
+                <label>ناوی خۆت بنووسە</label>
+                <input type="text" id="onlineCustName" class="input-field" placeholder="بۆ نموونە: محەمەد ئەحمەد">
+            </div>
+            <div class="form-group">
+                <label>ژمارەی مۆبایلەکەت</label>
+                <input type="tel" id="onlineCustPhone" class="input-field" placeholder="0750XXXXXXX" dir="ltr">
+            </div>
+            <button class="btn-submit" onclick="bookFromHome()">✅ ناوم تۆمار بکە لە سەرە</button>
+        </div>
+
+        <!-- بلیتی موشتەری دوای نۆرەگرتن -->
+        <div class="glass-panel hidden" id="custTicketView">
+            <div class="ticket-box">
+                <div style="font-size: 0.9rem; color: var(--gold-light); font-weight: 700;">نۆرەکەت بە سەرکەوتوویی تۆمار کرا!</div>
+                <div class="ticket-num" id="myTicketNumber">#1</div>
+                <div style="font-size: 1.05rem; font-weight: 800; color: white; margin-bottom: 8px;" id="myTicketName"></div>
+                <div style="font-size: 0.88rem; color: var(--success); font-weight: 700;" id="peopleAheadText">0 کەس لە پێشت ماوە</div>
+            </div>
+            <button class="btn-outline" style="width: 100%; margin-top: 12px; border-color: var(--danger); color: var(--danger);" onclick="cancelMyTicket()">❌ هەڵوەشاندنەوەی نۆرەکەم</button>
         </div>
 
         <div class="section-header">
-            <span class="section-title">⏳ لیستی چاوڕوانی ئەمڕۆ</span>
+            <span class="section-title">📋 لیستی چاوەڕوانی ئێستای دوکان</span>
         </div>
-        <div id="queueContainer" class="queue-list"></div>
-    </div>
-
-    <!-- ۲. بەشی موشتەرییەکانی ئەمڕۆم (تەواوبووەکان) -->
-    <div id="doneSection" class="hidden">
-        <div class="section-header">
-            <span class="section-title">✅ موشتەرییەکانی ئەمڕۆم (تەواوبووەکان)</span>
-        </div>
-        <div id="completedContainer" class="queue-list"></div>
-    </div>
-
-    <!-- ۳. بەشی مێژوو و داهات -->
-    <div id="historySection" class="hidden">
-        <div class="stats-grid-report">
-            <div class="stat-card-rep">
-                <div class="stat-title">ئەمڕۆ</div>
-                <div class="stat-money" id="todayMoney">0</div>
-                <div class="stat-count" id="todayCount">0 کەس</div>
-            </div>
-            <div class="stat-card-rep">
-                <div class="stat-title">ئەم هەفتەیە</div>
-                <div class="stat-money" id="weekMoney">0</div>
-                <div class="stat-count" id="weekCount">0 کەس</div>
-            </div>
-            <div class="stat-card-rep">
-                <div class="stat-title">ئەم مانگە</div>
-                <div class="stat-money" id="monthMoney">0</div>
-                <div class="stat-count" id="monthCount">0 کەس</div>
-            </div>
-        </div>
-
-        <div class="export-box">
-            <button class="btn-outline" onclick="exportCSV()">📥 دابەزاندنی ڕاپۆرت (Excel)</button>
-            <button class="btn-outline" onclick="shareSummary()">📤 ناردنی کورتەی داهات</button>
-        </div>
-        <div id="historyContainer"></div>
+        <div id="publicQueueList" class="queue-list"></div>
     </div>
 </div>
 
 <script>
+    // ۱. بەڕێوەبردنی ڤیدیۆی ئینترۆ
     const introVid = document.getElementById('introVideo');
     const removeSplash = () => {
         const splash = document.getElementById('splashScreen');
@@ -518,41 +681,96 @@
             setTimeout(() => splash.remove(), 500);
         }
     };
-    introVid.onended = removeSplash;
+    if (introVid) {
+        const playPromise = introVid.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(() => setTimeout(removeSplash, 1800));
+        }
+        introVid.onended = removeSplash;
+    }
     setTimeout(removeSplash, 5000);
 
-    let records = JSON.parse(localStorage.getItem('barber_records_v1')) || [];
+    // ۲. بەستنەوەی ڕاستەوخۆ بە Firebase Realtime Database
+    const firebaseConfig = {
+        databaseURL: "https://abdulla-dalak-default-rtdb.firebaseio.com"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const recordsRef = db.ref('barber_records');
+
+    // دیاریکردنی ئەوەی ئایا وەستایە یان موشتەری (لە ڕێگەی لینکەکەوە)
+    const urlParams = new URLSearchParams(window.location.search);
+    const isCustomerMode = urlParams.get('mode') === 'customer';
+
+    const customerBookingUrl = window.location.origin + window.location.pathname + '?mode=customer';
+    document.getElementById('qrCodeImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(customerBookingUrl)}`;
+
+    if (isCustomerMode) {
+        document.getElementById('barberAppView').classList.add('hidden');
+        document.getElementById('customerAppView').classList.remove('hidden');
+    }
 
     const todayStr = new Date().toLocaleDateString('ckb-IQ', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     document.getElementById('currentDateText').innerText = todayStr;
 
-    function switchTab(tab) {
-        const todaySec = document.getElementById('todaySection');
-        const doneSec = document.getElementById('doneSection');
-        const histSec = document.getElementById('historySection');
-        
-        const btnToday = document.getElementById('tabTodayBtn');
-        const btnDone = document.getElementById('tabDoneBtn');
-        const btnHist = document.getElementById('tabHistoryBtn');
+    let records = [];
+    let initialLoadDone = false;
 
-        todaySec.classList.add('hidden');
-        doneSec.classList.add('hidden');
-        histSec.classList.add('hidden');
-        
-        btnToday.classList.remove('active');
-        btnDone.classList.remove('active');
-        btnHist.classList.remove('active');
+    // زەنگی ئاگادارکردنەوە کاتێک موشتەری لە ماڵەوە نۆرە دەگرێت
+    function playNotificationBeep() {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, ctx.currentTime);
+            gain.gain.setValueAtTime(0.15, ctx.currentTime);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.25);
+        } catch(e) {}
+    }
+
+    // گوێگرتنی لایڤ لە داتابەیس
+    recordsRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        const newRecords = data ? Object.values(data) : [];
+        newRecords.sort((a, b) => a.timestamp - b.timestamp);
+
+        if (initialLoadDone && !isCustomerMode && newRecords.length > records.length) {
+            playNotificationBeep();
+        }
+        records = newRecords;
+        initialLoadDone = true;
+
+        if (isCustomerMode) {
+            renderCustomerView();
+        } else {
+            renderQueue();
+            calculateStats();
+        }
+    });
+
+    function switchTab(tab) {
+        const secs = ['todaySection', 'doneSection', 'historySection', 'qrSection'];
+        const btns = ['tabTodayBtn', 'tabDoneBtn', 'tabHistoryBtn', 'tabQrBtn'];
+        secs.forEach(s => document.getElementById(s).classList.add('hidden'));
+        btns.forEach(b => document.getElementById(b).classList.remove('active'));
 
         if (tab === 'today') {
-            todaySec.classList.remove('hidden');
-            btnToday.classList.add('active');
+            document.getElementById('todaySection').classList.remove('hidden');
+            document.getElementById('tabTodayBtn').classList.add('active');
         } else if (tab === 'doneList') {
-            doneSec.classList.remove('hidden');
-            btnDone.classList.add('active');
+            document.getElementById('doneSection').classList.remove('hidden');
+            document.getElementById('tabDoneBtn').classList.add('active');
         } else if (tab === 'history') {
-            histSec.classList.remove('hidden');
-            btnHist.classList.add('active');
+            document.getElementById('historySection').classList.remove('hidden');
+            document.getElementById('tabHistoryBtn').classList.add('active');
             renderHistory();
+        } else if (tab === 'qrCode') {
+            document.getElementById('qrSection').classList.remove('hidden');
+            document.getElementById('tabQrBtn').classList.add('active');
         }
     }
 
@@ -560,7 +778,8 @@
         document.getElementById('custPrice').value = val;
     }
 
-    function addCustomer() {
+    // زیادکردنی موشتەری لەلایەن وەستاوە
+    function addCustomerByBarber() {
         const nameInput = document.getElementById('custName');
         const phoneInput = document.getElementById('custPhone');
         const priceInput = document.getElementById('custPrice');
@@ -574,30 +793,66 @@
             return;
         }
 
-        records.push({
-            id: Date.now(),
+        const id = Date.now();
+        recordsRef.child(id).set({
+            id: id,
             name: name,
             phone: phone,
             price: price,
-            timestamp: new Date().getTime(),
-            completed: false
+            timestamp: id,
+            completed: false,
+            bookedOnline: false
         });
 
-        saveAndRender();
         nameInput.value = '';
         phoneInput.value = '';
         priceInput.value = '5000';
     }
 
-    function toggleComplete(id) {
-        records = records.map(item => item.id === id ? { ...item, completed: !item.completed } : item);
-        saveAndRender();
+    // زیادکردنی نۆرە لەلایەن موشتەرییەوە لە ماڵەوە
+    function bookFromHome() {
+        const nameInput = document.getElementById('onlineCustName');
+        const phoneInput = document.getElementById('onlineCustPhone');
+
+        const name = nameInput.value.trim();
+        const phone = phoneInput.value.trim();
+
+        if (!name || !phone) {
+            alert('تکایە ناو و ژمارەی مۆبایلەکەت بە تەواوی بنووسە!');
+            return;
+        }
+
+        const id = Date.now();
+        recordsRef.child(id).set({
+            id: id,
+            name: name,
+            phone: phone,
+            price: 5000,
+            timestamp: id,
+            completed: false,
+            bookedOnline: true
+        });
+
+        localStorage.setItem('my_active_ticket_id', id);
+        nameInput.value = '';
+        phoneInput.value = '';
+    }
+
+    function cancelMyTicket() {
+        const myId = localStorage.getItem('my_active_ticket_id');
+        if (myId && confirm('دڵنیایت دەتەوێت نۆرەکەت هەڵبوەشێنیتەوە؟')) {
+            recordsRef.child(myId).remove();
+            localStorage.removeItem('my_active_ticket_id');
+        }
+    }
+
+    function toggleComplete(id, currentStatus) {
+        recordsRef.child(id).update({ completed: !currentStatus });
     }
 
     function deleteRecord(id) {
         if (confirm('دڵنیایت لە سڕینەوەی ئەم ناوە؟')) {
-            records = records.filter(item => item.id !== id);
-            saveAndRender();
+            recordsRef.child(id).remove();
         }
     }
 
@@ -621,12 +876,7 @@
         return date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth();
     }
 
-    function saveAndRender() {
-        localStorage.setItem('barber_records_v1', JSON.stringify(records));
-        renderQueue();
-        calculateStats();
-    }
-
+    // پیشاندانی لیستەکان بۆ وەستا
     function renderQueue() {
         const queueContainer = document.getElementById('queueContainer');
         const completedContainer = document.getElementById('completedContainer');
@@ -637,7 +887,7 @@
         const doneList = todayList.filter(item => item.completed);
 
         if (pendingList.length === 0) {
-            queueContainer.innerHTML = `<div class="empty-state">هیچ موشتەرییەک لە لیستی چاوڕوانیدا نییە</div>`;
+            queueContainer.innerHTML = `<div class="empty-state">هیچ موشتەرییەک لە لیستی چاوەڕوانیدا نییە</div>`;
         } else {
             queueContainer.innerHTML = '';
             pendingList.forEach((item, index) => {
@@ -648,14 +898,15 @@
                 const callHTML = item.phone ? `<a href="tel:${item.phone}" class="btn-icon btn-call" title="تەلەفۆن">📞</a>` : '';
                 const waPhone = item.phone ? item.phone.replace(/^0/, '+964') : '';
                 const waHTML = item.phone ? `<a href="https://wa.me/${waPhone}" target="_blank" class="btn-icon btn-whatsapp" title="واتسئاپ">💬</a>` : '';
+                const onlineTag = item.bookedOnline ? `<span class="online-badge">🌐 ئۆنلاین</span>` : '';
 
                 card.innerHTML = `
                     <div class="customer-info">
                         <div class="queue-number">${index + 1}</div>
                         <div class="customer-details">
-                            <h3>${item.name}</h3>
+                            <h3>${item.name} ${onlineTag}</h3>
                             <div class="customer-meta">
-                                <span class="price-badge">${item.price.toLocaleString()} د.ع</span>
+                                <span class="price-badge">${(item.price || 5000).toLocaleString()} د.ع</span>
                                 <span>•</span>
                                 <span dir="ltr">${timeFormatted}</span>
                             </div>
@@ -664,7 +915,7 @@
                     <div class="action-buttons">
                         ${callHTML}
                         ${waHTML}
-                        <button class="btn-icon btn-done" onclick="toggleComplete(${item.id})" title="تەواوبوو">✔️</button>
+                        <button class="btn-icon btn-done" onclick="toggleComplete(${item.id}, ${item.completed})" title="تەواوبوو">✔️</button>
                         <button class="btn-icon btn-delete" onclick="deleteRecord(${item.id})" title="سڕینەوە">🗑️</button>
                     </div>
                 `;
@@ -676,7 +927,7 @@
             completedContainer.innerHTML = `<div class="empty-state">هێشتا هیچ موشتەرییەک تەواو نەکراوە</div>`;
         } else {
             completedContainer.innerHTML = '';
-            doneList.forEach((item, index) => {
+            doneList.forEach((item) => {
                 const timeFormatted = new Date(item.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
                 const card = document.createElement('div');
                 card.className = 'customer-card done';
@@ -691,7 +942,7 @@
                         <div class="customer-details">
                             <h3>${item.name}</h3>
                             <div class="customer-meta">
-                                <span class="price-badge">${item.price.toLocaleString()} د.ع</span>
+                                <span class="price-badge">${(item.price || 5000).toLocaleString()} د.ع</span>
                                 <span>•</span>
                                 <span dir="ltr">${timeFormatted}</span>
                             </div>
@@ -700,11 +951,61 @@
                     <div class="action-buttons">
                         ${callHTML}
                         ${waHTML}
-                        <button class="btn-icon btn-done" onclick="toggleComplete(${item.id})" title="گەڕاندنەوە" style="background: rgba(16,185,129,0.3);">✅</button>
-                        <button class="btn-icon btn-delete" onclick="deleteRecord(${item.id})" title="سڕینەوە">🗑️</button>
+                        <button class="btn-icon btn-done" onclick="toggleComplete(${item.id}, ${item.completed})" style="background: rgba(16,185,129,0.3);">✅</button>
+                        <button class="btn-icon btn-delete" onclick="deleteRecord(${item.id})">🗑️</button>
                     </div>
                 `;
                 completedContainer.appendChild(card);
+            });
+        }
+    }
+
+    // پیشاندانی پەڕەی موشتەری لە ماڵەوە
+    function renderCustomerView() {
+        const now = new Date();
+        const todayList = records.filter(item => isSameDay(new Date(item.timestamp), now));
+        const pendingList = todayList.filter(item => !item.completed);
+
+        document.getElementById('custWaitingCount').innerText = pendingList.length;
+
+        const myId = Number(localStorage.getItem('my_active_ticket_id'));
+        const myIndex = pendingList.findIndex(item => item.id === myId);
+
+        const formEl = document.getElementById('custBookingForm');
+        const ticketEl = document.getElementById('custTicketView');
+
+        if (myIndex !== -1) {
+            const myData = pendingList[myIndex];
+            formEl.classList.add('hidden');
+            ticketEl.classList.remove('hidden');
+            document.getElementById('myTicketNumber').innerText = '#' + (myIndex + 1);
+            document.getElementById('myTicketName').innerText = myData.name;
+            document.getElementById('peopleAheadText').innerText = myIndex === 0 ? '🎉 ئێستا سەرەی تۆیە! فەرموو بۆ دوکان' : `${myIndex} کەس لە پێشت ماوە`;
+        } else {
+            formEl.classList.remove('hidden');
+            ticketEl.classList.add('hidden');
+        }
+
+        const publicListEl = document.getElementById('publicQueueList');
+        if (pendingList.length === 0) {
+            publicListEl.innerHTML = `<div class="empty-state">هیچ کەسێک لە سەرەدا نییە، ئێستا نۆرە بگرە!</div>`;
+        } else {
+            publicListEl.innerHTML = '';
+            pendingList.forEach((item, index) => {
+                const isMe = item.id === myId;
+                const card = document.createElement('div');
+                card.className = 'customer-card';
+                if (isMe) card.style.borderColor = 'var(--gold-primary)';
+
+                card.innerHTML = `
+                    <div class="customer-info">
+                        <div class="queue-number">${index + 1}</div>
+                        <div class="customer-details">
+                            <h3>${item.name} ${isMe ? '<span class="online-badge">تۆ</span>' : ''}</h3>
+                        </div>
+                    </div>
+                `;
+                publicListEl.appendChild(card);
             });
         }
     }
@@ -765,6 +1066,19 @@
         });
     }
 
+    function shareCustomerLink() {
+        if (navigator.share) {
+            navigator.share({
+                title: 'نۆرەگرتنی سەرتاشخانەی عەبدوڵا دەلاک',
+                text: 'لە ڕێگەی ئەم لینکەوە لە ماڵەوە سەرە بۆ خۆت دابنێ:',
+                url: customerBookingUrl
+            });
+        } else {
+            navigator.clipboard.writeText(customerBookingUrl);
+            alert('لینکی موشتەری کۆپی کرا:\n' + customerBookingUrl);
+        }
+    }
+
     function exportCSV() {
         if (records.length === 0) {
             alert('هیچ داتایەک نییە بۆ دابەزاندن!');
@@ -795,8 +1109,6 @@
             alert('ڕاپۆرتەکە کۆپی کرا:\n' + text);
         }
     }
-
-    saveAndRender();
 </script>
 
 </body>
