@@ -482,21 +482,20 @@
     const ADMIN_USER = "admin";
     const ADMIN_PASS = "1234";
 
-    // ================= ڕێکخستنی بۆتی تێلێگرام =================
-    const TG_BOT_TOKEN = "9184875316:AAFpJZWDKhIQb1FUT_VDnwmccQ9zOO7ihok";
+    // ================= ڕێکخستنی بۆتی تێلێگرام (ڕاستکراوەوە) =================
+    const TG_BOT_TOKEN = "9184875316:AAFpJZWDkHIqb1FUT_VDnwmccQ9zOO7ihok";
     const TG_CHAT_ID = "1122860781";
 
     function sendTelegramAlert(messageText) {
-        const url = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
-        fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                chat_id: TG_CHAT_ID,
-                text: messageText,
-                parse_mode: 'HTML'
+        const url = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage?chat_id=${TG_CHAT_ID}&parse_mode=HTML&text=${encodeURIComponent(messageText)}`;
+        fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                if (!data.ok) {
+                    console.error("Telegram Error:", data.description);
+                }
             })
-        }).catch(err => console.error("Telegram Error:", err));
+            .catch(err => console.error("Telegram Error:", err));
     }
 
     const introVid = document.getElementById('introVideo');
